@@ -3,46 +3,46 @@ layout: home
 
 hero:
   name: rollup.js
-  text: The JavaScript module bundler
-  tagline: Compile small pieces of code into something larger and more complex
+  text: JavaScript modul bandleri
+  tagline: Kiçik kod parçalarını böyük və mürəkkəb proqramlara kompilyasiya edin
   image: /rollup-logo.svg
   actions:
     - theme: brand
-      text: Get Started
+      text: Başlayın
       link: /introduction/
     - theme: alt
-      text: View on GitHub
+      text: GitHub-da baxın
       link: https://github.com/rollup/rollup
 features:
   - icon: 🌍
-    title: The Web, Node …
-    details: 'Rollup supports many output formats: ES modules, CommonJS, UMD, SystemJS and more. Bundle not only for the web but for many other platforms as well.'
+    title: Veb, Node…
+    details: Rollup ES modulları, CommonJS, UMD, SystemJS və s. kimi bir çox ixrac formatlarını dəstəkləyir. Yalnızca veb üçün deyil, bir sıra digər platformlar üçün də bandl edir.
     link: /configuration-options/#output-format
-    linkText: See all formats
+    linkText: Bütün formatlara baxın
   - icon: 🌳
-    title: Tree-shaking
-    details: Superior dead code elimination based on deep execution path analysis with the tool that brought tree-shaking to the JavaScript world.
+    title: Tri-şeykinq
+    details: Tri-şeykinqi JavaScript-ə bəxş edən texnologiya ilə kodun icra mövqeyinin dərin analizi əsasında ölü kodları təmizləyir.
     link: /faqs/#what-is-tree-shaking
-    linkText: Learn about tree-shaking
+    linkText: Tri-şeykinq haqqında ətraflı
   - icon: 🗡️
-    title: Code-splitting without overhead
-    details: Split code based on different entry points and dynamic imports by just using the import mechanism of the output format instead of customer loader code.
+    title: Artıq kod olmadan aparılan kod bölgüsü
+    details: İstifadəçi tərəfindən yüklənən kod əvəzinə çıxış formatının idxal mexanizmindən istifadə edərək müxtəlif giriş nöqtələri və dinamik importlar əsasında kod bölgüsü aparır.
     link: /tutorial/#code-splitting
-    linkText: How to use code-splitting
+    linkText: Kod bölgüsündən necə istifadə etmək olar
   - icon: 🔌
-    title: Powerful plugins
-    details: An easy to learn plugin API that allows you to implement powerful code injections and transformations with little code. Adopted by Vite and WMR.
+    title: Güclü plaginlər
+    details: Öyrənməyin asan olduğu proqramlaşdırma interfeysi (API) sizə az kodla çox nəticə əldə etməyinizə imkan yaradır. Vite və WMR bu texnologiyadan istifadə edir.
     link: /plugin-development/#plugins-overview
-    linkText: Learn how to write plugins
+    linkText: Plagin yazmağı öyrənin
   - icon: 🛠️
-    title: Handles your special needs
-    details: Rollup is not opinionated. Many configuration options and a rich plugin interface make it the ideal bundler for special build flows and higher level tooling.
+    title: Xüsusi ehtiyaclarınıza uyğunlaşır
+    details: Rollup bir qəliblə məhdudlaşmayıb. Çoxsaylı konfiqurasiya seçimləri və zəngin plagin interfeysi Rollup-ı xüsusi iş axınları və yüksək səviyyəli tulinq üçün ideal bandler edir.
     link: /configuration-options/
-    linkText: See all options
+    linkText: Konfiqurasiya seçimlərinə baxın
   - icon:
       src: /vitejs-logo.svg
-    title: The bundler behind Vite
-    details: Developing for the web? Vite pre-configures Rollup for you with sensible defaults and powerful plugins while giving you an insanely fast development server.
+    title: Vite-ə güc verən bandler
+    details: Veb üçün kod yazırsınız? Vite sizin üçün Rollup-ı məqsədəuyğun seçimlər və lazımi plaginlərlə əvvəlcədən konfiqurasiya edir və sizə inanılmaz dərəcədə sürətli bir tərtibat serveri təqdim edir.
     link: https://vitejs.dev/
-    linkText: Check out Vite
+    linkText: Vite-ə nəzər salın
 ---

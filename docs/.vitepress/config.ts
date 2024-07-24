@@ -12,7 +12,7 @@ import { buildEnd, callback, transformPageData } from './verify-anchors';
 
 export default defineConfig({
 	buildEnd,
-	description: 'compile JS code',
+	description: 'JS kodunu kompilyasiya edin',
 	head: [
 		['link', { href: '/favicon.png', rel: 'icon', type: 'image/png' }],
 		['link', { href: '/favicon.png', rel: 'apple-touch-icon', sizes: '128x128' }],
@@ -28,7 +28,9 @@ export default defineConfig({
 		['meta', { content: 'https://rollupjs.org/twitter-card.jpg', name: 'twitter:image' }]
 	],
 	locales: {
-		root: { label: 'English' },
+		en: { label: 'İngiliscə', link: 'https://rollupjs.org' },
+		root: { label: 'Azərbaycanca' },
+		tr: { label: 'Türkçe', link: 'https://tr.rollupjs.org' },
 		zh: { label: '简体中文', link: 'https://cn.rollupjs.org' }
 	},
 	markdown: {
@@ -67,83 +69,98 @@ export default defineConfig({
 		}
 	},
 	themeConfig: {
-		algolia: {
-			apiKey: '233d24494bdf54811b5c3181883b5ee3',
-			appId: 'V5XQ4IDZSG',
-			indexName: 'rollupjs'
-		},
 		editLink: {
-			pattern: 'https://github.com/rollup/rollup/edit/master/docs/:path',
-			text: 'Edit this page on GitHub'
+			pattern: 'https://github.com/rollup/rollup-docs-az/edit/master/docs/:path',
+			text: 'Bu səhifəni GitHub-da redaktə edin'
 		},
 		footer: {
-			copyright: 'Copyright © 2015-present Rollup contributors',
-			message: 'Released under the MIT License.'
+			copyright: 'Rollup əməkdaşları © 2015-h.h. Bütün hüquqlar qorunur.',
+			message: 'MIT lisenziyası altında yayımlanır.'
 		},
 		logo: '/rollup-logo.svg',
 		nav: [
-			{ link: '/introduction/', text: 'guide' },
+			{ link: '/introduction/', text: 'yolgöstərici' },
 			{ link: '/repl/', text: 'repl' },
-			{ link: 'https://is.gd/rollup_chat', text: 'chat' },
+			{ link: 'https://is.gd/rollup_chat', text: 'söhbət' },
 			{ link: 'https://opencollective.com/rollup', text: 'opencollective' }
 		],
 		outline: 'deep',
+		search: {
+			options: {
+				apiKey: '233d24494bdf54811b5c3181883b5ee3',
+				appId: 'V5XQ4IDZSG',
+				indexName: 'rollupjs',
+				translations: {
+					button: {
+						buttonText: 'Axtarın'
+					},
+					modal: {
+						footer: {
+							closeText: 'bağlamaq üçün',
+							navigateText: 'hərəkət etmək üçün',
+							selectText: 'seçmək üçün'
+						}
+					}
+				}
+			},
+			provider: 'algolia'
+		},
 		sidebar: [
 			{
 				items: [
 					{
 						link: '/introduction/',
-						text: 'Introduction'
+						text: 'Giriş'
 					},
 					{
 						link: '/command-line-interface/',
-						text: 'Command Line Interface'
+						text: 'Komanda Sətri İnterfeysi'
 					},
 					{
 						link: '/javascript-api/',
-						text: 'Javascript API'
+						text: 'JavaScript Proqramlaşdırma İnterfeysi'
 					}
 				],
-				text: 'Getting started'
+				text: 'Başlanğıc'
 			},
 			{
 				items: [
 					{
 						link: '/tutorial/',
-						text: 'Tutorial'
+						text: 'Öyrədici'
 					},
 					{
 						link: '/es-module-syntax/',
-						text: 'ES Module Syntax'
+						text: 'ES Modul Sintaksisi'
 					},
 					{
 						link: '/faqs/',
-						text: 'Frequently Asked Questions'
+						text: 'Tez-Tez Verilən Suallar'
 					},
 					{
 						link: '/troubleshooting/',
-						text: 'Troubleshooting'
+						text: 'Xətaları Düzəltmək'
 					},
 					{
 						link: '/migration/',
-						text: 'Migrating to Rollup 4'
+						text: 'Rollup 4-ə Miqrasiya'
 					},
 					{
 						link: '/tools/',
-						text: 'Other Tools'
+						text: 'Digər Alətlər'
 					}
 				],
-				text: 'More info'
+				text: 'Ətraflı məlumat'
 			},
 			{
 				items: [
 					{
 						link: '/configuration-options/',
-						text: 'Configuration Options'
+						text: 'Konfiqurasiya Seçimləri'
 					},
 					{
 						link: '/plugin-development/',
-						text: 'Plugin Development'
+						text: 'Plagin Tərtibatı'
 					}
 				],
 				text: 'API'
