@@ -31,7 +31,7 @@ features:
     linkText: Kod bölgüsündən necə istifadə etmək olar
   - icon: 🔌
     title: Güclü plaginlər
-    details: Öyrənməyin asan olduğu proqramlaşdırma interfeysi (API) sizə az kodla çox nəticə əldə etməyinizə imkan yaradır. Vite və WMR bu texnologiyadan istifadə edir.
+    details: Öyrənməyin asan olduğu proqramlaşdırma interfeysi ("API") sizə az kodla çox nəticə əldə etməyinizə imkan yaradır. Vite və WMR bu texnologiyadan istifadə edir.
     link: /plugin-development/#plugins-overview
     linkText: Plagin yazmağı öyrənin
   - icon: 🛠️

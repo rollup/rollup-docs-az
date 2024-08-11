@@ -28,7 +28,7 @@ export default defineConfig({
 		['meta', { content: 'https://rollupjs.org/twitter-card.jpg', name: 'twitter:image' }]
 	],
 	locales: {
-		en: { label: 'İngiliscə', link: 'https://rollupjs.org' },
+		en: { label: 'English', link: 'https://rollupjs.org' },
 		root: { label: 'Azərbaycanca' },
 		tr: { label: 'Türkçe', link: 'https://tr.rollupjs.org' },
 		zh: { label: '简体中文', link: 'https://cn.rollupjs.org' }
@@ -69,6 +69,10 @@ export default defineConfig({
 		}
 	},
 	themeConfig: {
+		docFooter: {
+			next: 'Növbəti səhifə',
+			prev: 'Əvvəlki səhifə'
+		},
 		editLink: {
 			pattern: 'https://github.com/rollup/rollup-docs-az/edit/master/docs/:path',
 			text: 'Bu səhifəni GitHub-da redaktə edin'

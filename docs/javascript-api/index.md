@@ -1,28 +1,28 @@
 ---
-title: JavaScript API
+title: JavaScript Proqramlaşdırma İnterfeysi
 ---
 
 # {{ $frontmatter.title }}
 
 [[toc]]
 
-Rollup provides a JavaScript API which is usable from Node.js. You will rarely need to use this, and should probably be using the command line API unless you are extending Rollup itself or using it for something esoteric, such as generating bundles programmatically.
+Rollup sizə Node.js-də istifadə edə biləcəyiniz JavaScript proqramlaşdırma interfeysi təqdim edir. Bu, sıravi istifadəçi kimi sizə o qədər də lazım olmayacaq; əgər Rollup-ın özünü genişləndirmək, yaxud bandlları proqramlaşdırma üsulları ilə yaratmaq kimi mürəkkəb işlər görməyəcəksinizsə, komanda sətri interfeysi sizə kifayət edəcək.
 
 ## rollup.rollup
 
-The `rollup.rollup` function receives an input options object as parameter and returns a Promise that resolves to a `bundle` object with various properties and methods as shown below. During this step, Rollup will build the module graph and perform tree-shaking, but will not generate any output.
+`rollup.rollup` funksiyası arqument kimi giriş parametrləri obyekti qəbul edir və aşağıda göstərilən müxtəlif parametrlər və metodların mövcud olduğu `bundle` obyektinə həll olan bir vəd ("Promise") qaytarır. Bu zaman Rollup modul qrafikini yaradır və tri-şeykinqi işə salır, ancaq hər hansı bir çıxış qaytarmır.
 
-On a `bundle` object, you can call `bundle.generate` multiple times with different output options objects to generate different bundles in-memory. If you directly want to write them to disk, use `bundle.write` instead.
+`bundle` obyektində siz müxtəlif yaddaşdaxili bandllar yaratmaq üçün fərqli çıxış seçimləri ilə bir neçə dəfə `bundle.generate` funksiyasını işə sala bilərsiniz. Əgər siz onları birbaşa diskə yazmaq istəyirsinizsə, `bundle.write` funksiyasından istifadə edə bilərsiniz.
 
-Once you're finished with the `bundle` object, you should call `bundle.close()`, which will let plugins clean up their external processes or services via the [`closeBundle`](../plugin-development/index.md#closebundle) hook.
+`bundle` obyekti ilə işiniz bitəndən sonra isə `bundle.close` funksiyasını işə salmalısınız ki, plaginlər [`closeBundle`](../plugin-development/index.md#closebundle) qarmağı ("hook") ilə xarici prosesləri və xidmətləri təmizləyə bilsin.
 
-If an error occurs at either stage, it will return a Promise rejected with an Error, which you can identify via their `code` property. Besides `code` and `message`, many errors have additional properties you can use for custom reporting, see [`utils/logs.ts`](https://github.com/rollup/rollup/blob/master/src/utils/logs.ts) for a complete list of errors and logs together with their codes and properties.
+Əgər haradasa xəta baş versə, Rollup `Error` ilə imtina edilmiş vəd qaytaracaq, siz də bu zaman `code` parametri vasitəsilə problemi müəyyənləşdirə biləcəksiniz. Bir çox xətalar xüsusi raportlaşdırma zamanı istifadə edə bilməyiniz üçün `code` və `message`dən başqa parametlərə də sahibdir. Xətaların və qeydlərin kodları və parametrləri ilə birlikdə tam siyahısına [`utils/logs.ts`](https://github.com/rollup/rollup/blob/master/src/utils/logs.ts) faylında baxa bilərsiniz.
 
 <!-- prettier-ignore-start -->
 ```javascript twoslash
 import { rollup } from 'rollup';
 
-// see below for details on these options
+// bu seçimlər haqqında daha ətraflı aşağıda
 // ---cut-start---
 /** @type {import('rollup').InputOptions} */
 // ---cut-end---
@@ -30,8 +30,8 @@ const inputOptions = {
 	/* ... */
 };
 
-// you can create multiple outputs from the same input to generate e.g.
-// different formats like CommonJS and ESM
+// siz eyni girişdən bir neçə müxtəlif — məsələn, 
+// CommonJS və ESM kimi ayrı-ayrı formatlarda çıxış yarada bilərsiniz
 // ---cut-start---
 /** @type {import('rollup').OutputOptions[]} */
 // ---cut-end---
@@ -53,20 +53,20 @@ async function build() {
 	let bundle;
 	let buildFailed = false;
 	try {
-		// create a bundle
+		// bandl yaradın
 		bundle = await rollup(inputOptions);
 
-		// an array of file names this bundle depends on
+		// bandlın asılı olduğu fayl adlarından ibarət siyahı
 		console.log(bundle.watchFiles);
 
 		await generateOutputs(bundle);
 	} catch (error) {
 		buildFailed = true;
-		// do some error reporting
+		// xətanın raport edilməsi
 		console.error(error);
 	}
 	if (bundle) {
-		// closes the bundle
+		// bandl bağlanır
 		await bundle.close();
 	}
 	process.exit(buildFailed ? 1 : 0);
@@ -77,48 +77,48 @@ async function build() {
 // ---cut-end---
 async function generateOutputs(bundle) {
 	for (const outputOptions of outputOptionsList) {
-		// generate output specific code in-memory
-		// you can call this function multiple times on the same bundle object
-		// replace bundle.generate with bundle.write to directly write to disk
+		// xüsusi yaddaşdaxili çıxış kodu yaradın
+		// bu funksiyanı eyni bandl obyekti üzərində bir neçə dəfə işə salmaq mümkündür
+		// birbaşa diskə yazmaq üçün bundle.generate əvəzinə bundle.write istifadə edin
 		const { output } = await bundle.generate(outputOptions);
 
 		for (const chunkOrAsset of output) {
 			if (chunkOrAsset.type === 'asset') {
-				// For assets, this contains
+				// resurs ("asset") tipli obyektə daxildir:
 				// {
-				//   fileName: string,              // the asset file name
-				//   source: string | Uint8Array    // the asset source
-				//   type: 'asset'                  // signifies that this is an asset
+				//   fileName: string,              // resurs faylının adı
+				//   source: string | Uint8Array    // resurs mənbəyi
+				//   type: 'asset'                  // obyektin resurs olduğunu vurğulayır
 				// }
 				console.log('Asset', chunkOrAsset);
 			} else {
-				// For chunks, this contains
+				// blok ("chunk") tipli obyektə daxildir:
 				// {
-				//   code: string,                  // the generated JS code
-				//   dynamicImports: string[],      // external modules imported dynamically by the chunk
-				//   exports: string[],             // exported variable names
-				//   facadeModuleId: string | null, // the id of a module that this chunk corresponds to
-				//   fileName: string,              // the chunk file name
-				//   implicitlyLoadedBefore: string[]; // entries that should only be loaded after this chunk
-				//   imports: string[],             // external modules imported statically by the chunk
-				//   importedBindings: {[imported: string]: string[]} // imported bindings per dependency
-				//   isDynamicEntry: boolean,       // is this chunk a dynamic entry point
-				//   isEntry: boolean,              // is this chunk a static entry point
-				//   isImplicitEntry: boolean,      // should this chunk only be loaded after other chunks
-				//   map: string | null,            // sourcemaps if present
-				//   modules: {                     // information about the modules in this chunk
+				//   code: string,                  // yaradılan JS kodu
+				//   dynamicImports: string[],      // blok tərəfindən dinamik idxal edilən xarici modullar
+				//   exports: string[],             // ixrac edilən dəyişkən adları
+				//   facadeModuleId: string | null, // blokun uyğun gəldiyi müvafiq modulun identifikator nömrəsi
+				//   fileName: string,              // blokun fayl adı
+				//   implicitlyLoadedBefore: string[]; // yalnız bu blokdan sonra yüklənə biləcək daxiletmələr
+				//   imports: string[],             // blok tərəfindən statik idxal edilən xarici modullar
+				//   importedBindings: {[imported: string]: string[]} // hər asılılığın idxal etdiyi qoşmalar
+				//   isDynamicEntry: boolean,       // bu blok dinamik giriş nöqtəsidir?
+				//   isEntry: boolean,              // bu blok statik giriş nöqtəsidir?
+				//   isImplicitEntry: boolean,      // bu blok yalnız digərlərindən sonra yüklənə bilər?
+				//   map: string | null,            // varsa, mənbə xəritəsi
+				//   modules: {                     // blokdakı modullar haqqında məlumat
 				//     [id: string]: {
-				//       renderedExports: string[]; // exported variable names that were included
-				//       removedExports: string[];  // exported variable names that were removed
-				//       renderedLength: number;    // the length of the remaining code in this module
-				//       originalLength: number;    // the original length of the code in this module
-				//       code: string | null;       // remaining code in this module
+				//       renderedExports: string[]; // ixrac edilən dəyişkənlərdən saxlanılanların adları
+				//       removedExports: string[];  // ixrac edilən dəyişkənlərdən silinənlərin adları
+				//       renderedLength: number;    // moduldakı qalan kodun uzunluğu
+				//       originalLength: number;    // moduldakı əsl kodun uzunluğu
+				//       code: string | null;       // modulda qalan kod
 				//     };
 				//   },
-				//   name: string                   // the name of this chunk as used in naming patterns
-				//   preliminaryFileName: string    // the preliminary file name of this chunk with hash placeholders
-				//   referencedFiles: string[]      // files referenced via import.meta.ROLLUP_FILE_URL_<id>
-				//   type: 'chunk',                 // signifies that this is a chunk
+				//   name: string                   // adlandırma sxemlərində blokun adı
+				//   preliminaryFileName: string    // çözənək yertutucular ilə faylın ilkin adı
+				//   referencedFiles: string[]      // import.meta.ROLLUP_FILE_URL_<id> ilə istinad edilən fayllar
+				//   type: 'chunk',                 // obyektin blok olduğunu göstərir
 				// }
 				console.log('Chunk', chunkOrAsset.modules);
 			}
@@ -128,21 +128,21 @@ async function generateOutputs(bundle) {
 ```
 <!-- prettier-ignore-end -->
 
-### inputOptions object
+### inputOptions obyekti {#inputoptions-object}
 
-The `inputOptions` object can contain the following properties (see the [big list of options](../configuration-options/index.md) for full details on these):
+`inputOptions` obyektində aşağıdakı parametrlər mövcuddur (daha ətraflı [bu siyahıda](../configuration-options/index.md)):
 
 ```js twoslash
 // ---cut-start---
 /** @type {import('rollup').InputOptions} */
 // ---cut-end---
 const inputOptions = {
-	// core input options
+	// əsas giriş seçimləri
 	external,
-	input, // conditionally required
+	input, // şərti məcbur
 	plugins,
 
-	// advanced input options
+	// yüksək səviyyəli giriş seçimləri
 	cache,
 	logLevel,
 	makeAbsoluteExternalsRelative,
@@ -152,30 +152,30 @@ const inputOptions = {
 	preserveEntrySignatures,
 	strictDeprecations,
 
-	// danger zone
+	// təhlükəli
 	context,
 	moduleContext,
 	preserveSymlinks,
 	shimMissingExports,
 	treeshake,
 
-	// experimental
+	// eksperimental
 	experimentalCacheExpiry,
 	experimentalLogSideEffects,
 	perf
 };
 ```
 
-### outputOptions object
+### outputOptions obyekti {#outputoptions-object}
 
-The `outputOptions` object can contain the following properties (see the [big list of options](../configuration-options/index.md) for full details on these):
+`outputOptions` obyektində aşağıdakı parametrlər mövcuddur (daha ətraflı [bu siyahıda](../configuration-options/index.md)):
 
 ```js twoslash
 // ---cut-start---
 /** @type {import('rollup').OutputOptions} */
 // ---cut-end---
 const outputOptions = {
-	// core output options
+	// əsas çıxış seçimləri
 	dir,
 	file,
 	format,
@@ -183,7 +183,7 @@ const outputOptions = {
 	name,
 	plugins,
 
-	// advanced output options
+	// yüksək səviyyəli çıxış seçimləri
 	assetFileNames,
 	banner,
 	chunkFileNames,
@@ -215,7 +215,7 @@ const outputOptions = {
 	sourcemapPathTransform,
 	validate,
 
-	// danger zone
+	// təhlükəli
 	amd,
 	esModule,
 	exports,
@@ -228,14 +228,14 @@ const outputOptions = {
 	strict,
 	systemNullSetters,
 
-	// experimental
+	// eksperimental
 	experimentalMinChunkSize
 };
 ```
 
 ## rollup.watch
 
-Rollup also provides a `rollup.watch` function that rebuilds your bundle when it detects that the individual modules have changed on disk. It is used internally when you run Rollup from the command line with the `--watch` flag. Note that when using watch mode via the JavaScript API, it is your responsibility to call `event.result.close()` in response to the `BUNDLE_END` event to allow plugins to clean up resources in the [`closeBundle`](../plugin-development/index.md#closebundle) hook, see below.
+Rollup sizə həmçinin diskdə modulların dəyişdiyini aşkar edəndə yeni bandl yaradan `rollup.watch` funksiyası da təqdim edir. Bu funksiya Rollup komanda sətrindən `--watch` parametri ilə işə salınanda daxili şəkildə istifadə edilir. Qeyd etmək lazımdır ki, izləmə modundan JavaScript proqramlaşdırma interfeysi vasitəsilə istifadə edəndə plaginlərin [`closeBundle`](../plugin-development/index.md#closebundle) qarmağındakı resursları təmizləməsinə imkan yaratmaq üçün `BUNDLE_END` hadisəsinə cavab olaraq `event.result.close` funksiyasını işə salmaq sizin məsuliyyətinizdədir.
 
 ```js twoslash
 const rollup = require('rollup');
@@ -249,62 +249,62 @@ const watchOptions = {
 const watcher = rollup.watch(watchOptions);
 
 watcher.on('event', event => {
-	// event.code can be one of:
-	//   START        — the watcher is (re)starting
-	//   BUNDLE_START — building an individual bundle
-	//                  * event.input will be the input options object if present
-	//                  * event.output contains an array of the "file" or
-	//                    "dir" option values of the generated outputs
-	//   BUNDLE_END   — finished building a bundle
-	//                  * event.input will be the input options object if present
-	//                  * event.output contains an array of the "file" or
-	//                    "dir" option values of the generated outputs
-	//                  * event.duration is the build duration in milliseconds
-	//                  * event.result contains the bundle object that can be
-	//                    used to generate additional outputs by calling
-	//                    bundle.generate or bundle.write. This is especially
-	//                    important when the watch.skipWrite option is used.
-	//                  You should call "event.result.close()" once you are done
-	//                  generating outputs, or if you do not generate outputs.
-	//                  This will allow plugins to clean up resources via the
-	//                  "closeBundle" hook.
-	//   END          — finished building all bundles
-	//   ERROR        — encountered an error while bundling
-	//                  * event.error contains the error that was thrown
-	//                  * event.result is null for build errors and contains the
-	//                    bundle object for output generation errors. As with
-	//                    "BUNDLE_END", you should call "event.result.close()" if
-	//                    present once you are done.
-	// If you return a Promise from your event handler, Rollup will wait until the
-	// Promise is resolved before continuing.
+	// event.code bunlardan biri ola bilər:
+	//   START        — izləyici başlayır
+	//   BUNDLE_START — bir ədəd bandl yaradılır
+	//                  * event.input — əgər giriş seçimləri varsa, onların obyekti
+	//                  * event.output — "file", yaxud "dir" seçimlərinin
+	//                  dəyərlərindən ibarət siyahı
+	//   BUNDLE_END   — bandlın biri yaradılıb qurtarılıb
+	//                  * event.input — əgər giriş seçimləri varsa, onların obyekti
+	//                  * event.output — yaradılan çıxışların "file", yaxud "dir"
+	//                    seçimlərinin dəyərlərindən ibarət siyahı
+	//                  * event.duration — inşa müddəti (millisaniyə ilə)
+	//                  * event.result — bundle.generate, yaxud bundle.write
+	//                    işə salınaraq əlavə çıxışlar yaratmaq üçün
+	//                    istifadə edilə biləcək bandl obyekti. Bu, watch.skipWrite
+	//                    aktiv olan zaman xüsusi əhəmiyyət kəsb edir.
+	//                  Əgər daha yeni çıxış yaratmayacaqsınızsa, gərək
+	//                  "event.result.close" funksiyasını işə salasınız.
+	//                  Beləliklə, plaginlər "closeBundle" qoşması ilə
+	//                  resursları təmizləyə biləcəklər.
+	//   END          — bütün bandlların yaradılması bitib
+	//   ERROR        — bandllar yaradılan zaman xəta baş verdi
+	//                  * event.error — baş verən xəta
+	//                  * event.result — inşa zamanı yaranan xətalarda "null";
+	//                    çıxış yaradılan zaman baş verən xətalarda isə bandl obyekti.
+	//                    "BUNDLE_END" zamanı baş verərse, bandl prosesi sona çatanda
+	//                    "event.result.close" funksiyasını işə salmalısınız.
+	// Əgər hadisə emalçısı ("event handler") vəd qaytarsa,
+	// Rollup həmin vəd həll olana qədər gözləyəcək.
 });
 
-// This will make sure that bundles are properly closed after each run
+// Hər dəfə sona çatanda bandlların düzgün şəkildə bağlanmağını dəqiqləşdirmək üçün
 watcher.on('event', ({ result }) => {
 	if (result) {
 		result.close();
 	}
 });
 
-// Additionally, you can hook into the following. Again, return a Promise to
-// make Rollup wait at that stage:
+// İstəsəniz, aşağıdakı variantlardan da istifadə edə bilərsiniz.
+// Əgər Rollup-ın gözləməyini istəyirsinizsə, vəd qaytarmağınız kifayət edir.
 watcher.on('change', (id, { event }) => {
-	/* a file was modified */
+	/* hansısa fayl redaktə ediləndə */
 });
 watcher.on('restart', () => {
-	/* a new run was triggered */
+	/* yenidən işə salınanda */
 });
 watcher.on('close', () => {
-	/* the watcher was closed, see below */
+	/* izləyici bağlananda (aşağıya nəzər yetirin) */
 });
 
-// to stop watching
+// izləmə prosesini dayandırmaq üçün
 watcher.close();
 ```
 
 ### watchOptions
 
-The `watchOptions` argument is a config (or an array of configs) that you would export from a config file.
+`watchOptions` arqumenti konfiqurasiya faylından ixrac edilən bir, yaxud siyahı halında bir neçə konfiqurasiya qəbul edir.
 
 ```js twoslash
 // ---cut-start---
@@ -324,47 +324,47 @@ const watchOptions = {
 };
 ```
 
-See above for details on `inputOptions` and `outputOptions`, or consult the [big list of options](../configuration-options/index.md) for info on `chokidar`, `include` and `exclude`.
+`inputOptions` və `outputOptions` haqqında daha ətraflı məlumatı yuxarıdan; `chokidar`, `include` və `exclude` haqqında isə [seçimlərin geniş siyahısından](../configuration-options/index.md) əldə edə bilərsiniz.
 
-## Programmatically loading a config file
+## Konfiqurasiya faylını proqramla yükləmək {#programmatically-loading-a-config-file}
 
-In order to aid in generating such a config, rollup exposes the helper it uses to load config files in its command line interface via a separate entry-point. This helper receives a resolved `fileName` and optionally an object containing command line parameters:
+Belə bir konfiqurasiyanın yaradılmasında sizə kömək etmək üçün Rollup öz komanda sətri interfeysində konfiqurasiya fayllarını yükləyərkən istifadə etdiyi köməkçini ayrı bir giriş nöqtəsində ixrac edir. Bu köməkçi həll olunmuş `fileName` — fayl adı və ixtiyari olaraq komanda sətri parametrlərindən ibarət obyekt qəbul edir.
 
 ```js twoslash
 const { loadConfigFile } = require('rollup/loadConfigFile');
 const path = require('node:path');
 const rollup = require('rollup');
 
-// load the config file next to the current script;
-// the provided config object has the same effect as passing "--format es"
-// on the command line and will override the format of all outputs
+// hal-hazırkı skript ilə eyni qovluqdakı konfiqurasiya faylını yükləyir;
+// daxil edilmiş konfiqurasiya obyekti komanda sətrində "--format es"in
+// təyin olunması ilə eynigüclüdür; həmçinin bütün çıxışların formatlarına şamil olunur
 loadConfigFile(path.resolve(__dirname, 'rollup.config.js'), {
 	format: 'es'
 }).then(async ({ options, warnings }) => {
-	// "warnings" wraps the default `onwarn` handler passed by the CLI.
-	// This prints all warnings up to this point:
+	// "warnings" parametri KSİ-dəki ("CLI") defolt "onwarn" emalçısı ilə eynigüclüdür.
+	// Bu kod indiyə qədərki bütün xəbərdarlıqları çap eləyir:
 	console.log(`We currently have ${warnings.count} warnings`);
 
-	// This prints all deferred warnings
+	// Bu isə bütün təxirə salınmış xəbərdarlıqları çap edir:
 	warnings.flush();
 
-	// options is an array of "inputOptions" objects with an additional
-	// "output" property that contains an array of "outputOptions".
-	// The following will generate all outputs for all inputs, and write
-	// them to disk the same way the CLI does it:
+	// "options" — "inputOptions" obyektləri, əlavə olaraq da
+	// "outputOptions" obyektləri siyahısı — "output" parametrindən ibarət siyahı.
+	// Aşağıdakı kod hər bir giriş üçün mümkün olan bütün çıxışları yaradacaq,
+	// və KSİ kimi onların hamısını diskə yazacaq.
 	for (const optionsObj of options) {
 		const bundle = await rollup.rollup(optionsObj);
 		await Promise.all(optionsObj.output.map(bundle.write));
 	}
 
-	// You can also pass this directly to "rollup.watch"
+	// İstəsəniz, bunu — seçimləri birbaşa "rollup.watch" funksiyasına da ötürə bilərsiniz:
 	rollup.watch(options);
 });
 ```
 
-## Applying advanced log filters
+## Yüksək səviyyəli qeydiyyat filtrlərinin tətbiqi {#applying-advanced-log-filters}
 
-While the command line interface provides a powerful way to filter logs via the [`--filterLogs`](../command-line-interface/index.md#filterlogs-filter) flag, this functionality is not directly available when using the JavaScript API. However, Rollup exposes a helper `getLogFilter` to generate filters using the same syntax as the CLI. This is useful when specifying a custom `onLog` handler and for third party systems that want to provide a similar filtering experience as Rollup CLI. This function accepts an array of strings. Note that it does not split up comma-separated lists of filters like the CLI does.
+Komanda sətri interfeysi [`--filterLogs`](../command-line-interface/index.md#filterlogs-filter) sayəsində qeydləri filtrləməyə şərait yaratsa da, bu xüsusiyyət JavaScript proqramlaşdırma interfeysində əlçatan deyil. Buna baxmayaraq, JavaScript proqramlaşdırma interfeysində komanda sətrindəki ilə eyni sintaksisdən istifadə edərək filtrləşdirmə əməliyyatı aparmağınız üçün Rollup `getLogFilter` köməkçisini sizə ixrac edir. Bu, öz fərdi `onLog` emalçınız olan zaman, yaxud üçüncü tərəf sistemlərdə Rollup-ın komanda sətri interfeysi ilə bənzər filtrləmə mexanizmi yaratmaq istəyəndə sizə kifayət qədər kömək edəcək. Funksiya mətn tipli verilənlərdən ibarət siyahı qəbul edir. Qeyd etmək lazımdır ki, bu köməkçi KSİ-dən fərqli olaraq, vergüllə ayrılan filtr siyahılarını bölüşdürmür.
 
 ```js twoslash
 // rollup.config.mjs
@@ -383,9 +383,9 @@ export default {
 };
 ```
 
-## Accessing the parser
+## Təhliledici ilə əlaqə yaratmaq {#accessing-the-parser}
 
-In order to parse arbitrary code using Rollup's parser, plugins can use [`this.parse`](../plugin-development/index.md#this-parse). To use this functionality outside the context of a Rollup build, the parser is also exposed as a separate export. It has the same signature as `this.parse`:
+Rollup-ın təhliledicisi ilə ixtiyari kodu təhlil etmək üçün plaginlərdə [`this.parse`](../plugin-development/index.md#this-parse) funksiyasından istifadə edilə bilər. Rollup-dan kənar yerdə bu funksiyadan istifadə etmək istəyirsinizsə, təhliledici `this.parse` funksiyası ilə eyni sintaksislə ayrıca da ixrac edilir.
 
 ```js twoslash
 import { parseAst } from 'rollup/parseAst';
@@ -416,7 +416,7 @@ assert.deepEqual(
 );
 ```
 
-There is also an asynchronous version that parses in a different thread in the non-wasm builds of Rollup:
+Təhliledicinin həmçinin kodu Rollup-ın qeyri-vasm inşalarında ayrı treddə təhlil edən asinxron versiyası da mövcuddur:
 
 ```js twoslash
 import { parseAstAsync } from 'rollup/parseAst';

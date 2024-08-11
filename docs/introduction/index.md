@@ -1,90 +1,88 @@
 ---
-title: Introduction
+title: Giriş
 ---
 
 # {{ $frontmatter.title }}
 
 [[toc]]
 
-## Overview
+## Ümumi baxış {#overview}
 
-Rollup is a module bundler for JavaScript which compiles small pieces of code into something larger and more complex, such as a library or application. It uses the new standardized format for code modules included in the ES6 revision of JavaScript, instead of previous idiosyncratic solutions such as CommonJS and AMD. ES modules let you freely and seamlessly combine the most useful individual functions from your favorite libraries. This will eventually be possible natively everywhere, but Rollup lets you do it today.
+Rollup kiçik kod parçalarını kitabxana, yaxud tətbiq kimi daha böyük və daha mürəkkəb vahidlərə kompilyasiya edən JavaScript modul bandleridir. O, CommonJS və AMD kimi köhnə üsulların əvəzinə JavaScript-in ES6 nəşrindəki standart modul formatından istifadə edir. ES modulları sizə istədiyiniz kitabxanadan istədiyiniz funksiyaları azad və rahat şəkildə yığmağa şərait yaradır. Gələcəkdə doğma üsullarla bunu hər yerdə etmək mümkün olacaq, ancaq Rollup sizə bu fürsəti indidən verir.
 
-## Installation
+## Quraşdırma {#installation}
 
 ```shell
 npm install --global rollup
 ```
 
-This will make Rollup available as a global command line tool. You can also install it locally, see [Installing Rollup locally](../tutorial/index.md#installing-rollup-locally).
+Bununla Rollup-ı qlobal komanda sətri aləti kimi quraşdırmaq mümkündür. Əgər istəsəniz, Rollup-ı [lokal şəkildə də quraşdıra bilərsiniz](../tutorial/index.md#installing-rollup-locally).
 
-## Quick Start
+## Cəld Başlanğıc {#quick-start}
 
-Rollup can be used either through a [command line interface](../command-line-interface/index.md) with an optional configuration file, or else through its [JavaScript API](../javascript-api/index.md). Run `rollup --help` to see the available options and parameters.
+Rollup-dan həm ixtiyari bir konfiqurasiya faylı ilə [komanda sətri interfeysi](../command-line-interface/index.md), həm də onun [JavaScript proqramlaşdırma interfeysi](../javascript-api/index.md) vasitəsilə istifadə edə bilərsiniz. Mümkün konfiqurasiya seçimləri və parametrlərini `rollup --help` komandası ilə görə bilərsiniz.
 
-> See [rollup-starter-lib](https://github.com/rollup/rollup-starter-lib) and [rollup-starter-app](https://github.com/rollup/rollup-starter-app) to see example library and application projects using Rollup
+> Rollup-ın istifadə olunduğu nümunə kitabxana və tətbiqləri görmək üçün [rollup-starter-lib](https://github.com/rollup/rollup-starter-lib) və [rollup-starter-app](https://github.com/rollup/rollup-starter-app) proyektlərinə nəzər yetirə bilərsiniz.
 
-These commands assume the entry point to your application is named `main.js`, and that you'd like all imports compiled into a single file named `bundle.js`.
+Bu komandalar ilə əsas giriş nöqtəsi `main.js` olan və bütün idxalatı `bundle.js` faylında cəmləşən bir tətbiqi kompilyasiya edə bilərsiniz.
 
-For browsers:
+::: code-group
 
-```shell
-# compile to a <script> containing a self-executing function ('iife')
-rollup main.js --file bundle.js --format iife
+```shell [Brauzerlər üçün:]
+# öz-özünü işə salan funksiyanın (iife) mövcud olduğu <script> teqinə kompilyasiya edir
+$ rollup main.js --file bundle.js --format iife
 ```
 
-For Node.js:
-
-```shell
-# compile to a CommonJS module ('cjs')
-rollup main.js --file bundle.js --format cjs
+```shell [Node.js üçün:]
+# CommonJS moduluna (cjs) kompilyasiya edir
+$ rollup main.js --file bundle.js --format cjs
 ```
 
-For both browsers and Node.js:
-
-```shell
-# UMD format requires a bundle name
-rollup main.js --file bundle.js --format umd --name "myBundle"
+```shell [Həm brauzerlər, həm də Node.js üçün:]
+# UMD formatında bandl adını qeyd etmək lazım gəlir
+$ rollup main.js --file bundle.js --format umd --name "myBundle"
 ```
 
-## The Why
+:::
 
-Developing software is usually easier if you break your project into smaller separate pieces, since that often removes unexpected interactions and dramatically reduces the complexity of the problems you'll need to solve, and simply writing smaller projects in the first place [isn't necessarily the answer](https://medium.com/@Rich_Harris/small-modules-it-s-not-quite-that-simple-3ca532d65de4). Unfortunately, JavaScript has not historically included this capability as a core feature in the language.
+## Niyə Məhz Rollup {#the-why}
 
-This finally changed with the ES6 revision of JavaScript, which includes a syntax for importing and exporting functions and data so they can be shared between separate scripts. The specification is now fixed, but it is only implemented in modern browsers and not finalised in Node.js. Rollup allows you to write your code using the new module system, and will then compile it back down to existing supported formats such as CommonJS modules, AMD modules, and IIFE-style scripts. This means that you get to _write future-proof code_, and you also get the tremendous benefits of…
+Proyekti kiçik hissələrə böləndə proqram yazmaq, adətən, daha asan başa gəlir, çünki belə olan halda gözlənilməyən qarşılıqlı təsirlər və həll olunmalı problemlərin mürəkkəbliyi böyük ölçüdə azalır. Bununla belə, sadəcə kiçik ölçülü proyektlər yazmaq da [hər zaman çıxış yolu olmur](https://medium.com/@Rich_Harris/small-modules-it-s-not-quite-that-simple-3ca532d65de4). Təəssüf ki, JavaScript dilinin özülündə tarixən bu qabiliyyət mövcud olmayıb.
 
-## Tree-Shaking
+Bu, nəhayət, JavaScript-in ES6 nəşrində dəyişdi — data və funksiyaların ayrı-ayrı skriptlərdə istifadə edilə bilməsi məqsədilə idxal və ixracı üçün məqsədəuyğun sintaksis əlavə edildi. Bu spesifikasiya artıq qərarlaşdırılmış olsa da, yalnız müasir brauzerlər tərəfindən dəstəklənir və Node.js-də tamamlanmamışdır. Rollup sizə yeni modul sistemindən istifadə edərək kod yazmağınız üçün şərait yaradır. Yazdığınız kod isə CommonJS və AMD modulları, həmçinin öz-özünü işə salan skriptlərə kompilyasiya olunur. Beləliklə, siz _gələcəyə davamlı_ kod yaza bilərsiniz.
 
-In addition to enabling the use of ES modules, Rollup also statically analyzes the code you are importing, and will exclude anything that isn't actually used. This allows you to build on top of existing tools and modules without adding extra dependencies or bloating the size of your project.
+## Tri-Şeykinq {#tree-shaking}
 
-For example, with CommonJS, the _entire tool or library must be imported_.
+ES modullarının istifadəsini mümkün etməkdən başqa, Rollup həmçinin sizin idxal etdiyiniz kodu statik analizini edir və istifadə edilməyən hissələri kənarlaşdırır. Bu isə sizə əlavə asılılıqlar əlavə etmədən, yaxud proyektin ölçüsündə güzəştə getmədən mövcud alətlər və modullarla kod yazmağınıza imkan yaradır.
+
+Məsələn, CommonJS-də siz gərək bütün aləti, yaxud kitabxananı idxal edəsiniz.
 
 ```js
-// import the entire utils object with CommonJS
+// CommonJS ilə bütün utils obyektini idxal edirsiniz
 const utils = require('./utils');
 const query = 'Rollup';
-// use the ajax method of the utils object
+// utilitler obyektinin ajax metodundan istifadə edirsiniz
 utils.ajax(`https://api.example.com?search=${query}`).then(handleResponse);
 ```
 
-With ES modules, instead of importing the whole `utils` object, we can just import the one `ajax` function we need:
+ES modulları ilə isə bütün `utils` obyekti əvəzinə sadəcə bizə lazım olan `ajax` funksiyasını idxal edə bilərik:
 
 ```js
-// import the ajax function with an ES6 import statement
+// ES6 idxal bəyanatı ilə ajax funksiyasını idxal edin
 import { ajax } from './utils';
 const query = 'Rollup';
-// call the ajax function
+// ajax funksiyasını işə salın
 ajax(`https://api.example.com?search=${query}`).then(handleResponse);
 ```
 
-Because Rollup includes the bare minimum, it results in lighter, faster, and less complicated libraries and applications. Since this approach can utilise explicit `import` and `export` statements, it is more effective than simply running an automated minifier to detect unused variables in the compiled output code.
+Rollup mümkün qədər minimal kod ehtiva etdiyi üçün daha yüngül, daha sürətli və daha az mürəkkəb kitabxanalar və tətbiqlər yaradır. Beləliklə, birbaşa `import` və `export` bəyanatlarından istifadə edildiyi üçün kompilyasiya edilmiş kodda istifadə edilməyən dəyişkənləri avtomatik kiçildici ilə aşkar etməkdən daha əlverişli bir üsul alınır.
 
-## Compatibility
+## Uyğunluq {#compatibility}
 
-### Importing CommonJS
+### CommonJS İdxalatı {#importing-commonjs}
 
-Rollup can import existing CommonJS modules [through a plugin](https://github.com/rollup/plugins/tree/master/packages/commonjs).
+Rollup [plagin vasitəsilə](https://github.com/rollup/plugins/tree/master/packages/commonjs) mövcud CommonJS modullarını idxal edə bilər.
 
-### Publishing ES Modules
+### ES Modullarının Yayımlanması {#publishing-es-modules}
 
-To make sure your ES modules are immediately usable by tools that work with CommonJS such as Node.js and webpack, you can use Rollup to compile to UMD or CommonJS format, and then point to that compiled version with the `main` property in your `package.json` file. If your `package.json` file also has a `module` field, ES-module-aware tools like Rollup and [webpack 2+](https://webpack.js.org/) will [import the ES module version](https://github.com/rollup/rollup/wiki/pkg.module) directly.
+ES modullarınızın Node.js, yaxud webpack kimi CommonJS ilə işləyən alətlər tərəfindən istifadə edilə bilməsini təmin etmək üçün Rollup ilə UMD, yaxud CommonJS formatlarına kompilyasiya edib `package.json` faylındakı `main` parametrinə həmin kompilyasiya edilmiş faylı təyin edə bilərsiniz. Əgər `package.json` faylınızda `module` da təyin edilibsə, [webpack 2+](https://webpack.js.org/) və Rollup kimi ES modulunu tanıyan alətlər [birbaşa ES modulunu idxal edəcək](https://github.com/rollup/rollup/wiki/pkg.module).
