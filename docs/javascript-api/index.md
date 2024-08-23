@@ -16,7 +16,7 @@ Rollup sizə Node.js-də istifadə edə biləcəyiniz JavaScript proqramlaşdır
 
 `bundle` obyekti ilə işiniz bitəndən sonra isə `bundle.close` funksiyasını işə salmalısınız ki, plaginlər [`closeBundle`](../plugin-development/index.md#closebundle) qarmağı ("hook") ilə xarici prosesləri və xidmətləri təmizləyə bilsin.
 
-Əgər haradasa xəta baş versə, Rollup `Error` ilə imtina edilmiş vəd qaytaracaq, siz də bu zaman `code` parametri vasitəsilə problemi müəyyənləşdirə biləcəksiniz. Bir çox xətalar xüsusi raportlaşdırma zamanı istifadə edə bilməyiniz üçün `code` və `message`dən başqa parametlərə də sahibdir. Xətaların və qeydlərin kodları və parametrləri ilə birlikdə tam siyahısına [`utils/logs.ts`](https://github.com/rollup/rollup/blob/master/src/utils/logs.ts) faylında baxa bilərsiniz.
+Əgər haradasa xəta baş versə, Rollup `Error` ilə imtina edilmiş vəd qaytaracaq, siz də bu zaman `code` parametri vasitəsilə problemi müəyyənləşdirə biləcəksiniz. Bir çox xətalar xüsusi raportlaşdırma zamanı istifadə edə bilməyiniz üçün `code` və `message`-dən başqa parametlərə də sahibdir. Xətaların və qeydlərin kodları və parametrləri ilə birlikdə tam siyahısına [`utils/logs.ts`](https://github.com/rollup/rollup/blob/master/src/utils/logs.ts) faylında baxa bilərsiniz.
 
 <!-- prettier-ignore-start -->
 ```javascript twoslash
@@ -79,7 +79,7 @@ async function generateOutputs(bundle) {
 	for (const outputOptions of outputOptionsList) {
 		// xüsusi yaddaşdaxili çıxış kodu yaradın
 		// bu funksiyanı eyni bandl obyekti üzərində bir neçə dəfə işə salmaq mümkündür
-		// birbaşa diskə yazmaq üçün bundle.generate əvəzinə bundle.write istifadə edin
+		// birbaşa diskə yazmaq üçün "bundle.generate" əvəzinə "bundle.write" funksiyasından istifadə edə bilərsiniz
 		const { output } = await bundle.generate(outputOptions);
 
 		for (const chunkOrAsset of output) {
@@ -116,8 +116,8 @@ async function generateOutputs(bundle) {
 				//     };
 				//   },
 				//   name: string                   // adlandırma sxemlərində blokun adı
-				//   preliminaryFileName: string    // çözənək yertutucular ilə faylın ilkin adı
-				//   referencedFiles: string[]      // import.meta.ROLLUP_FILE_URL_<id> ilə istinad edilən fayllar
+				//   preliminaryFileName: string    // çözənək ("hash") yertutucular daxil edilməklə faylın ilkin adı
+				//   referencedFiles: string[]      // "import.meta.ROLLUP_FILE_URL_<id>" ilə istinad edilən fayllar
 				//   type: 'chunk',                 // obyektin blok olduğunu göstərir
 				// }
 				console.log('Chunk', chunkOrAsset.modules);
@@ -260,9 +260,9 @@ watcher.on('event', event => {
 	//                  * event.output — yaradılan çıxışların "file", yaxud "dir"
 	//                    seçimlərinin dəyərlərindən ibarət siyahı
 	//                  * event.duration — inşa müddəti (millisaniyə ilə)
-	//                  * event.result — bundle.generate, yaxud bundle.write
+	//                  * event.result — "bundle.generate", yaxud "bundle.write"
 	//                    işə salınaraq əlavə çıxışlar yaratmaq üçün
-	//                    istifadə edilə biləcək bandl obyekti. Bu, watch.skipWrite
+	//                    istifadə edilə biləcək bandl obyekti. Bu, "watch.skipWrite"
 	//                    aktiv olan zaman xüsusi əhəmiyyət kəsb edir.
 	//                  Əgər daha yeni çıxış yaratmayacaqsınızsa, gərək
 	//                  "event.result.close" funksiyasını işə salasınız.

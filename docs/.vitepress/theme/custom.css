@@ -58,6 +58,10 @@
 	white-space: nowrap;
 }
 
+.vp-doc :not(pre) > code {
+  white-space: nowrap;
+}
+
 svg[id^='mermaid-'] {
 	line-height: 1.5;
 	background-color: transparent !important;

@@ -1,38 +1,38 @@
 ---
-title: Tutorial
+title: Öyrədici
 ---
 
 # {{ $frontmatter.title }}
 
 [[toc]]
 
-## Creating Your First Bundle
+## İlk bandlınızı yaradın {#creating-your-first-bundle}
 
-_Before we begin, you'll need to have [Node.js](https://nodejs.org) installed so that you can use [NPM](https://npmjs.com). You'll also need to know how to access the [command line](https://www.codecademy.com/learn/learn-the-command-line) on your machine._
+_Başlamazdan əvvəl, sizin kompüterinizdə [Node.js](https://nodejs.org) quraşdırılmış olmalıdır ki, [NPM](https://npmjs.com)-dən istifadə edə biləsiniz. Sizə həmçinin [komanda sətrində](https://www.codecademy.com/learn/learn-the-command-line) necə əməliyyat aparmağı bilmək də lazım gələcək._
 
-The easiest way to use Rollup is via the Command Line Interface (or CLI). For now, we'll install it globally (later on we'll learn how to install it locally to your project so that your build process is portable, but don't worry about that yet). Type this into the command line:
+Rollup-ı quraşdırmağın ən asan yolu Kommanda Sətri İnterfeysindən (KSİ-dən) istifadə etməkdir. Hələlik onu qlobal şəkildə quraşdıra bilərik (bir azdan onu proyektə necə lokal şəkildə yükləməli olduğunuzu da görəcəksiniz, beləcə inşa prosesini mobilləşdirmək mümkün olacaq). Komanda sətrinə bunu daxil edin:
 
 ```shell
 npm install rollup --global
-# or `npm i rollup -g` for short
+# yaxud qısaca `npm i rollup -g`
 ```
 
-You can now run the `rollup` command. Try it!
+İndi siz `rollup` komandasını işə sala bilərsiniz!
 
 ```shell
 rollup
 ```
 
-Because no arguments were passed, Rollup prints usage instructions. This is the same as running `rollup --help`, or `rollup -h`.
+Heç bir arqument daxil edilmədiyi üçün Rollup istifadə instruksiyasını çap edir. `rollup --help`, yaxud `rollup -h` komandaları da eyni nəticəni verəcək.
 
-Let's create a simple project:
+Gəlin sadə bir proyekt yaradaq:
 
 ```shell
 mkdir -p my-rollup-project/src
 cd my-rollup-project
 ```
 
-First, we need an _entry point_. Paste this into a new file called `src/main.js`:
+Bizə hər şeydən əvvəl bir giriş nöqtəsi lazımdır. Aşağıdakı kodu `src/main.js` faylına daxil edin:
 
 ```js
 // src/main.js
@@ -42,25 +42,25 @@ export default function () {
 }
 ```
 
-Then, let's create the `foo.js` module that our entry point imports:
+İndi isə giriş nöqtəmizin idxal edəcəyi `foo.js` modulunu yaradaq:
 
 ```js
 // src/foo.js
-export default 'hello world!';
+export default 'salam, dünya!';
 ```
 
-Now we're ready to create a bundle:
+İndi biz bandl yarada bilərik:
 
 ```shell
 rollup src/main.js -f cjs
 ```
 
-The `-f` option (short for `--format`) specifies what kind of bundle we're creating — in this case, CommonJS (which will run in Node.js). Because we didn't specify an output file, it will be printed straight to `stdout`:
+`-f` parametri (`--format` sözünün ixtisarından) yaratdığımız bandlın növünü müəyyən edir — bu nümunədə CommonJS (Node.js-də işə salmaq üçün). Çıxış faylı təyin eləmədiyimiz üçün çap əməliyyatı birbaşa `stdout`-da icra olunacaq:
 
 ```js
 'use strict';
 
-const foo = 'hello world!';
+const foo = 'salam, dünya!';
 
 const main = function () {
 	console.log(foo);
@@ -69,32 +69,32 @@ const main = function () {
 module.exports = main;
 ```
 
-You can save the bundle as a file like so:
+Bandlı fayla bu cür yaza bilərsiniz:
 
 ```shell
 rollup src/main.js -o bundle.js -f cjs
 ```
 
-(You could also do `rollup src/main.js -f cjs > bundle.js`, but as we'll see later, this is less flexible if you're generating sourcemaps.)
+İstəsəniz, həmçinin `rollup src/main.js -f cjs > bundle.js` komandasını da icra edə bilərsiniz, amma bir azdan görəcəyik ki, mənbə xəritələri üçün bu üsul o qədər də əlverişli deyil.
 
-Try running the code:
+Kodu işə sala bilərsiniz:
 
 ```
 node
 > var myBundle = require('./bundle.js');
 > myBundle();
-'hello world!'
+'salam, dünya!'
 ```
 
-Congratulations! You've created your first bundle with Rollup.
+Təbrik edirik! Siz Rollup ilə ilk bandlınızı yaratdınız.
 
-## Using Config Files
+## Konfiqurasiya fayllarından istifadə etmək {#using-config-files}
 
-So far, so good, but as we start adding more options it becomes a bit of a nuisance to type out the command.
+Hələ ki, yaxşı gedirik, ancaq bir neçə parametr daha əlavə eləsək, komandaları yazmaq bir qədər vaxt aparacaq.
 
-To save repeating ourselves, we can create a config file containing all the options we need. A config file is written in JavaScript and is more flexible than the raw CLI.
+Eyni şeyi təkrar-təkrar yazmamaq üçün ehtiyacımız olan parametrlərdən ibarət konfiqurasiya faylı yarada bilərik. Konfiqurasiya faylı JavaScript ilə yazılır və sadə KSİ-dən daha əlverişlidir.
 
-Create a file in the project root called `rollup.config.mjs`, and add the following code:
+Proyektin olduğu qovluqda `rollup.config.mjs` faylını yaradıb aşağıdakı kodu daxil edin::
 
 ```js twoslash
 // rollup.config.mjs
@@ -110,59 +110,63 @@ export default {
 };
 ```
 
-(Note that you can use CJS modules and therefore `module.exports = {/* config */}`)
+Qeyd edək ki, siz CJS modullarından, o cümlədən `module.exports = {/* config */}` sintaksisindən də istifadə edə bilərsiniz.
 
-To use the config file, we use the `--config` or `-c` flag:
+Konfiqurasiya faylından istifadə etmək üçün `--config`, yaxud `-c` parametrindən istifadə edirik:
 
 ```shell
-rm bundle.js # so we can check the command works!
+rm bundle.js # komandanın işləyib-işləmədiyini yoxlamaq üçün
 rollup -c
 ```
 
-You can override any of the options in the config file with the equivalent command line options:
+Konfiqurasiya faylındakı istədiyiniz parametri komanda sətrində qeyd etdiklərinizlə əvəz edə bilərsiniz:
 
 ```shell
-rollup -c -o bundle-2.js # `-o` is equivalent to `--file` (formerly "output")
+rollup -c -o bundle-2.js # "-o" parametri "--file" ilə eynigüclüdür ("output" sözündən)
 ```
 
-_Note: Rollup itself processes the config file, which is why we're able to use `export default` syntax – the code isn't being transpiled with Babel or anything similar, so you can only use ES2015 features that are supported in the version of Node.js that you're running._
+_Qeyd: Rollup özü konfiqurasiya faylını emal edir, buna görə də `export default` sintaksisindən istifadə etmək mümkündür — daxil edilən kod Babel, yaxud hər hansı sair alət ilə transkompilyasiya edilmir, buna görə də siz yalnızca quraşdırdığınız Node.js versiyasının dəstəklədiyi ES2015 xüsusiyyətlərindən istifadə edə bilərsiniz._
 
-You can, if you like, specify a different config file from the default `rollup.config.mjs`:
+İstəsəniz, konfiqurasiya üçün `rollup.config.mjs`-dən başqa da fayl seçə bilərsiniz:
 
 ```shell
 rollup --config rollup.config.dev.mjs
 rollup --config rollup.config.prod.mjs
 ```
 
-## Installing Rollup locally
+## Rollup-ı lokal şəkildə quraşdırmaq {#installing-rollup-locally}
 
-When working within teams or distributed environments it can be wise to add Rollup as a _local_ dependency. Installing Rollup locally prevents the requirement that multiple contributors install Rollup separately as an extra step, and ensures that all contributors are using the same version of Rollup.
+Komandaların tərkibində, yaxud bölünmüş mühitlərdə işləyərkən Rollup-ı lokal asılılıq kimi əlavə eləmək daha məqsədəuyğun olar. Rollup-ı lokal şəkildə quraşdıranda başqa-başqa əməkdaşların bir də Rollup-ı ayrıca quraşdırmalarına ehtiyac qalmır və bütün əməkdaşlar Rollup-ın eyni versiyasından istifadə edir.
 
-To install Rollup locally with NPM:
+Rollup-ı bu cür lokal şəkildə quraşdıra bilərsiniz:
 
-```shell
+::: code-group
+
+```shell [npm]
 npm install rollup --save-dev
 ```
 
-Or with Yarn:
-
-```shell
+```shell [Yarn]
 yarn -D add rollup
 ```
 
-After installing, Rollup can be run within the root directory of your project:
+:::
 
-```shell
+Yüklənəndən sonra Rollup proyektinizin mövcud olduğu qovluqda işə salına bilər:
+
+::: code-group
+
+```shell [npm]
 npx rollup --config
 ```
 
-Or with Yarn:
-
-```shell
+```shell [Yarn]
 yarn rollup --config
 ```
 
-Once installed, it's common practice to add a single build script to `package.json`, providing a convenient command for all contributors. e.g.
+:::
+
+Tövsiyə edilir ki, kitabxananı yükləyəndən sonra `package.json` faylına bütün əməkdaşların rahatlıqla istifadə edə biləcəyi inşa skripti komandası əlavə edəsiniz:
 
 ```json
 {
@@ -172,17 +176,17 @@ Once installed, it's common practice to add a single build script to `package.js
 }
 ```
 
-_Note: Once installed locally, both NPM and Yarn will resolve the dependency's bin file and execute Rollup when called from a package script._
+_Qeyd: Lokal şəkildə yüklənəndə həm NPM, həm də Yarn kitabxananın binar faylını emal edəcək və hansısa paket skriptindən çağrılanda Rollup-ı işə salacaq._
 
-## Using plugins
+## Plaginlərdən istifadə etmək {#using-plugins}
 
-So far, we've created a simple bundle from an entry point and a module imported via a relative path. As you build more complex bundles, you'll often need more flexibility – importing modules installed with NPM, compiling code with Babel, working with JSON files and so on.
+Hələ ki, biz bir giriş nöqtəsi və nisbi fayl mövqeyi vasitəsilə idxal edilən bir moduldan ibarət sadə bir bandl yaratmışıq. Sizə isə daha mürəkkəb bandllar yaratdıqca daha çox elastiklik lazım olacaq, məsələn: NPM ilə yüklənmiş modulları idxal etmək, Babel ilə kodu kompilyasiya etmək, JSON faylları ilə işləmək və s.
 
-For that, we use _plugins_, which change the behaviour of Rollup at key points in the bundling process. A list of awesome plugins is maintained on [the Rollup Awesome List](https://github.com/rollup/awesome).
+Bunun üçün isə bizə **plaginlər** lazım olacaq. Plaginlər bandl yaradılma prosesi zamanı müəyyən mühüm nöqtələrdə Rollup-ın iş metoduna təsir edir. [Rollup-ın Möhtəşəmlər Siyahısında](https://github.com/rollup/awesome) bir sıra möhtəşəm plaginlər tapa bilərsiniz.
 
-For this tutorial, we'll use [@rollup/plugin-json](https://github.com/rollup/plugins/tree/master/packages/json), which allows Rollup to import data from a JSON file.
+Bu dərs zamanı biz [@rollup/plugin-json](https://github.com/rollup/plugins/tree/master/packages/json) plaginindən istifadə edəcəyik. Plagin bizə JSON faylından data idxal etməyə kömək edəcək.
 
-Create a file in the project root called `package.json`, and add the following content:
+Proyekt qovluğunda `package.json` faylını yaradın və aşağıdakı kodu daxil edin:
 
 ```json
 {
@@ -194,26 +198,26 @@ Create a file in the project root called `package.json`, and add the following c
 }
 ```
 
-Install @rollup/plugin-json as a development dependency:
+`@rollup/plugin-json` kitabxanasını tərtibat asılılığı kimi yükləyin:
 
 ```shell
 npm install --save-dev @rollup/plugin-json
 ```
 
-(We're using `--save-dev` rather than `--save` because our code doesn't actually depend on the plugin when it runs – only when we're building the bundle.)
+Burada `--save` əvəzinə `-save-dev` parametrindən istifadə etməyimizin səbəbi kodun işə salınma zamanı plagindən asılı olmamasıdır — o bizə yalnızca bandl yaradılması zamanı lazım olacaq.
 
-Update your `src/main.js` file so that it imports from your package.json instead of `src/foo.js`:
+`src/main.js` faylınızı lazımi məlumatı `src/foo.js` əvəzinə `package.json` faylından alması üçün redaktə edin:
 
 ```js
 // src/main.js
 import { version } from '../package.json';
 
 export default function () {
-	console.log('version ' + version);
+	console.log('versiya ' + version);
 }
 ```
 
-Edit your `rollup.config.mjs` file to include the JSON plugin:
+`rollup.config.mjs` faylınıza JSON plaginini tanıyan kodu əlavə edin:
 
 ```js twoslash
 // rollup.config.mjs
@@ -232,7 +236,7 @@ export default {
 };
 ```
 
-Run Rollup with `npm run build`. The result should look like this:
+Rollup-ı `npm run build` ilə işə salın. Nəticə bu cür olmalıdır:
 
 ```js
 'use strict';
@@ -240,25 +244,25 @@ Run Rollup with `npm run build`. The result should look like this:
 var version = '1.0.0';
 
 function main() {
-	console.log('version ' + version);
+	console.log('versiya ' + version);
 }
 
 module.exports = main;
 ```
 
-_Note: Only the data we actually need gets imported – `name` and `devDependencies` and other parts of `package.json` are ignored. That's **tree-shaking** in action._
+_Qeyd: Yalnızca bizə lazım olan data idxal edilir — `name`, `devDependencies` və `package.json` faylının digər hissələri görməzlikdən gəlinir. Bu, **tri-şeykinqin** əyani nümunəsidir._
 
-## Using output plugins
+## Çıxış plaginlərindən istifadə etmək {#using-output-plugins}
 
-Some plugins can also be applied specifically to some outputs. See [plugin hooks](../plugin-development/index.md#build-hooks) for the technical details of what output-specific plugins can do. In a nut-shell, those plugins can only modify code after the main analysis of Rollup has completed. Rollup will warn if an incompatible plugin is used as an output-specific plugin. One possible use-case is minification of bundles to be consumed in a browser.
+Bəzi plaginlər sırf bəzi nəzərdə tutulmuş nəticələri əldə etmək üçün istifadə edilə bilər. Çıxış üçün nəzərdə tutulmuş plaginlərin nələr edə biləcəyinin texniki təfərrüatı haqqında [plagin qarmaqlarında](../plugin-development/index.md#build-hooks) ətraflı öyrənə bilərsiniz. Müxtəsər, bu plaginlər kod üzərində yalnız Rollup-ın əsas analizi sona çatandan sonra dəyişikliklər apara bilər. Əgər çıxış üçün uyğun olmayan bir plagin bu məqsədlə istifadə edilərsə, Rollup xəbərdarlıq verəcək. Nümunəvi istifadə kimi bandlların brauzerdə yüklənilmək üçün kiçildilməsini göstərmək olar.
 
-Let us extend the previous example to provide a minified build together with the non-minified one. To that end, we install `@rollup/plugin-terser`:
+Gəlin bayaqkı nümunəni genişləndirək və bir kiçildilmiş, bir də kiçildilməmiş bandlı bir yerdə yaradaq. Bunun üçün bizə [@rollup/plugin-terser](https://github.com/rollup/plugins/tree/master/packages/terser) lazım olacaq:
 
 ```shell
 npm install --save-dev @rollup/plugin-terser
 ```
 
-Edit your `rollup.config.mjs` file to add a second minified output. As format, we choose `iife`. This format wraps the code so that it can be consumed via a `script` tag in the browser while avoiding unwanted interactions with other code. As we have an export, we need to provide the name of a global variable that will be created by our bundle so that other code can access our export via this variable.
+`rollup.config.mjs` faylını ikinci bir kiçildilmiş çıxış yaradılması üçün redaktə edin. Format kimi `iife` təyin edəcəyik, beləcə kod yığcamlaşdırılır və brauzerdə `script` teqi vasitəsilə digər kodla toqquşmadan istifadə edilə bilir. Bizim kodumuzda bir ədəd ixracat mövcuddur və savayı kodların bu ixracatdan istifadə edə bilməsi üçün bandl zamanı ona təyin edilmiş qlobal dəyişkən yaradılacaq, buna görə də biz həmin dəyişkən üçün ad təyin etməliyik.
 
 ```js twoslash
 // rollup.config.mjs
@@ -286,23 +290,23 @@ export default {
 };
 ```
 
-Besides `bundle.js`, Rollup will now create a second file `bundle.min.js`:
+İndi isə Rollup `bundle.js` faylından başqa `bundle.min.js` adında ikinci bir fayl da yaradacaq:
 
 ```js
 var version = (function () {
 	'use strict';
 	var n = '1.0.0';
 	return function () {
-		console.log('version ' + n);
+		console.log('versiya ' + n);
 	};
 })();
 ```
 
-## Code Splitting
+## Kod bölgüsü {#code-splitting}
 
-For code splitting, there are cases where Rollup splits code into chunks automatically, like dynamic loading or multiple entry points, and there is a way to explicitly tell Rollup which modules to split into separate chunks via the [`output.manualChunks`](../configuration-options/index.md#output-manualchunks) option.
+Dinamik yükləmə, yaxud çoxlu giriş nöqtəsindən istifadə kimi bəzi hallarda Rollup kodu bloklara avtomatik ayıra bilər, yaxud istəsəniz, Rollup-a [`output.manualChunks`](../configuration-options/index.md#output-manualchunks) parametri vasitəsilə hansı modulların parçalanmalı olduğunu siz deyə bilərsiniz.
 
-To use the code splitting feature to achieve the lazy dynamic loading (where some imported module(s) is only loaded after executing a function), we go back to the original example and modify `src/main.js` to load `src/foo.js` dynamically instead of statically:
+Astagəl ("lazy") dinamik yükləməni (idxal edilmiş bəzi modulların yalnız müəyyən bir funksiya işə salınandan sonra yüklənməsi) həyata keçirmək məqsədilə kod bölgüsü aparmaq üçün biz ilkin nümunəyə gedirik və `src/main.js` faylını redaktə edirik ki, `src/foo.js` dinamik şəkildə yüklənsin:
 
 ```js
 // src/main.js
@@ -311,21 +315,21 @@ export default function () {
 }
 ```
 
-Rollup will use the dynamic import to create a separate chunk that is only loaded on demand. In order for Rollup to know where to place the second chunk, instead of passing the `--file` option we set a folder to output to with the `--dir` option:
+Rollup bu dəfə dinamik idxaletmədən istifadə edərək yalnızca lazım olanda yüklənən ayrı bir blok yaradacaq. Rollup-ın bu bloku hara qoyacağını bilməsi üçün biz gərək `--file` parametri əvəzinə `--dir` ilə bir qovluq təyin edək:
 
 ```shell
 rollup src/main.js -f cjs -d dist
 ```
 
-This will create a folder `dist` containing two files, `main.js` and `chunk-[hash].js`, where `[hash]` is a content based hash string. You can supply your own naming patterns by specifying the [`output.chunkFileNames`](../configuration-options/index.md#output-chunkfilenames) and [`output.entryFileNames`](../configuration-options/index.md#output-entryfilenames) options.
+Bu, `dist` adında, 2 fayldan — `main.js` və `chunk-[hash].js` fayllarından ibarət bir qovluq yaradacaq. Burada `[hash]` — çözənəkdən ibarət yazıdır. [`output.chunkFileNames`](../configuration-options/index.md#output-chunkfilenames) və [`output.entryFileNames`](../configuration-options/index.md#output-entryfilenames) parametrləri ilə siz öz adlandırma sxemlərinizi təyin edə bilərsiniz.
 
-You can still run your code as before with the same output, albeit a little slower as loading and parsing of `./foo.js` will only commence once we call the exported function for the first time.
+Siz yenə əvvəlki kimi eyni çıxışla kodu işə sala bilərsiniz, sadəcə `foo.js` faylının yüklənməsi və emalı ixrac edilmiş funksiya çağrılandan sonra başlayacağı üçün kod bir qədər yavaş işləyəcək.
 
 ```shell
 node -e "require('./dist/main.js')()"
 ```
 
-If we do not use the `--dir` option, Rollup will again print the chunks to `stdout`, adding comments to highlight the chunk boundaries:
+Əgər biz `--dir` parametrindən istifadə etməsək, Rollup sərhədləri şərhlər vasitəsilə qeyd edərək blokları yenə `stdout`-a çap edəcək.
 
 ```js
 //→ main.js:
@@ -342,14 +346,14 @@ module.exports = main;
 //→ chunk-b8774ea3.js:
 ('use strict');
 
-var foo = 'hello world!';
+var foo = 'salam, dünya!';
 
 exports.default = foo;
 ```
 
-This is useful if you want to load and parse expensive features only once they are used.
+Əgər siz yalnızca lazım olanda işə salınmalı, ağır funksiyalardan istifadə etmək istəyirsinizsə, bu üsul işinizə yaraya bilər.
 
-A different use for code-splitting is the ability to specify several entry points that share some dependencies. Again we extend our example to add a second entry point `src/main2.js` that statically imports `src/foo.js` just like we did in the original example:
+Kod bölgüsünün başqa bir istifadə nümunəsi isə bir sıra ortaq asılılıqları olan müxtəlif giriş nöqtələrinin yaradılmasıdır. Biz yenə qayıdırıq bayaqkı nümunəyə və `src/main2.js` adında ikinci bir giriş nöqtəsi yaradırıq və birinci nümunədəki kimi `src/foo.js` modulunu statik idxal kimi təyin edirik:
 
 ```js
 // src/main2.js
@@ -359,13 +363,13 @@ export default function () {
 }
 ```
 
-If we supply both entry points to rollup, three chunks are created:
+Əgər Rollup-a hər iki giriş nöqtəsini də versək:
 
 ```shell
 rollup src/main.js src/main2.js -f cjs
 ```
 
-will output
+Çıxış belə olacaq:
 
 ```js
 //→ main.js:
@@ -393,16 +397,16 @@ module.exports = main2;
 //→ chunk-b8774ea3.js:
 ('use strict');
 
-var foo = 'hello world!';
+var foo = 'salam, dünya!';
 
 exports.default = foo;
 ```
 
-Notice how both entry points import the same shared chunk. Rollup will never duplicate code and instead create additional chunks to only ever load the bare minimum necessary. Again, passing the `--dir` option will write the files to disk.
+Diqqət etmək lazımdır ki, hər iki giriş nöqtəsi eyni bir bloku idxal etdi. Rollup bir qayda kimi eyni kodu təkrar-təkrar çıxarmaq əvəzinə yalnızca lazım olan hissələrdən ibarət bloklar yaradacaq. Əvvəlki kimi, `--dir` parametrini təyin eləyəndə nəticə diskə yazılacaq.
 
-You can build the same code for the browser via native ES modules, an AMD loader or SystemJS.
+Siz eyni kodu brauzer üçün doğma ES modulları, AMD yükləyicisi, yaxud SystemJS formatlarında inşa edə bilərsiniz.
 
-For example, with `-f es` for native modules:
+Məsələn, `-f es` sizə doğma modul çıxışı verəcək:
 
 ```shell
 rollup src/main.js src/main2.js -f es -d dist
@@ -416,19 +420,19 @@ rollup src/main.js src/main2.js -f es -d dist
 </script>
 ```
 
-Or alternatively, for SystemJS with `-f system`:
+Həmçinin `-f system` parametri də SystemJS çıxışı:
 
 ```shell
 rollup src/main.js src/main2.js -f system -d dist
 ```
 
-Install SystemJS via
+SystemJS-i aşağıdakı kimi quraşdırın:
 
 ```shell
 npm install --save-dev systemjs
 ```
 
-And then load either or both entry points in an HTML page as needed:
+Daha sonra isə giriş nöqtələrindən birini, yaxud hər ikisini HTML səhifəsində işə salın:
 
 ```html
 <!doctype html>
@@ -438,4 +442,4 @@ And then load either or both entry points in an HTML page as needed:
 </script>
 ```
 
-See [rollup-starter-code-splitting](https://github.com/rollup/rollup-starter-code-splitting) for an example on how to set up a web app that uses native ES modules on browsers that support them with a fallback to SystemJS if necessary.
+Doğma ES modulları və ehtiyatda onları dəstəkləyən SystemJS kodundan istifadə edən veb tətbiqinin yaradılması barədə [rollup-starter-code-splitting](https://github.com/rollup/rollup-starter-code-splitting) nümunəsinə nəzər yetirə bilərsiniz.
