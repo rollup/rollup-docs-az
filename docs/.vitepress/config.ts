@@ -69,6 +69,7 @@ export default defineConfig({
 		}
 	},
 	themeConfig: {
+		darkModeSwitchLabel: 'Görünüş',
 		docFooter: {
 			next: 'Növbəti səhifə',
 			prev: 'Əvvəlki səhifə'
@@ -88,7 +89,11 @@ export default defineConfig({
 			{ link: 'https://is.gd/rollup_chat', text: 'söhbət' },
 			{ link: 'https://opencollective.com/rollup', text: 'opencollective' }
 		],
-		outline: 'deep',
+		outline: {
+			label: 'Mündəricat',
+			level: 'deep'
+		},
+		returnToTopLabel: 'Yuxarı qayıdın',
 		search: {
 			options: {
 				apiKey: '233d24494bdf54811b5c3181883b5ee3',
@@ -143,11 +148,11 @@ export default defineConfig({
 					},
 					{
 						link: '/troubleshooting/',
-						text: 'Xətaları Düzəltmək'
+						text: 'Xətaların Aradan Qaldırılması'
 					},
 					{
 						link: '/migration/',
-						text: 'Rollup 4-ə Miqrasiya'
+						text: 'Rollup 4-ə Keçid'
 					},
 					{
 						link: '/tools/',
@@ -170,6 +175,7 @@ export default defineConfig({
 				text: 'API'
 			}
 		],
+		sidebarMenuLabel: 'Menyu',
 		socialLinks: [
 			{ icon: 'github', link: 'https://github.com/rollup/rollup' },
 			{ icon: 'mastodon', link: 'https://m.webtoo.ls/@rollupjs' }

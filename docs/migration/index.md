@@ -1,86 +1,79 @@
 ---
-title: Migrating to Rollup 4
+title: Rollup 4-ə Keçid
 ---
 
 # {{ $frontmatter.title }}
 
 [[toc]]
 
-This is a list of the most important topics you may encounter when migrating from Rollup 3 to Rollup 4. For a full list of breaking changes, we advise you to consult the
+Bu, Rollup 3-dən Rollup 4-ə keçən zaman rastlaşacağınız əsas nüanslardan ibarət siyahıdır. Mühüm fərqlərin tam siyahısını görmək üçün [Rollup 4 dəyişiklik qeydlərinə](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#400) nəzər yetirməyiniz tövsiyə olunur.
 
-- [Rollup 4 changelog](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#400)
+Daha ilkin versiyalardan keçid haqqında məlumat üçün [aşağıya baxa bilərsiniz](#migrating-to-rollup-3).
 
-For how to migrate from earlier versions, [see below](#migrating-to-rollup-3).
+## İlkin ehtiyaclar {#prerequisites}
 
-## Prerequisites
+Hər şeydən əvvəl, Node.js-in ən aşağısı 18.0.0 versiyasını quraşdırmağınıza və bütün Rollup plaginlərinin ən yeni versiyalarından istifadə etməyinizə əmin olmalısınız.
 
-Make sure you run at least Node 18.0.0 and update all your Rollup plugins to their latest versions.
+Nisbətən böyük ölçülü konfiqurasiyalar üçün yaxşı olar ki, birinci `rollup@3.29.4` versiyasını quraşdırıb, konfiqurasiyanıza [`strictDeprecations`](../configuration-options/index.md#strictdeprecations) parametrini əlavə edib yaranan xətaları aradan götürəsiniz. Beləliklə, siz əmin ola bilərsiniz ki, Rollup 4-də etibarsız hala gələn xüsusiyyətlərdən istifadə etmirsiniz. Əgər plaginlərlə bağlı problemlər yaranarsa, plagin müəllifləri ilə əlaqə saxlaya bilərsiniz.
 
-For larger configs, it can make sense to update to `rollup@3.29.4` first, add the [`strictDeprecations`](../configuration-options/index.md#strictdeprecations) option to your config and resolve any errors that pop up. That way you can make sure you do not rely on features that may have been removed in Rollup 4. If you have errors in your plugins, please contact the plugin author.
+## Ümumi dəyişikliklər {#general-changes}
 
-## General Changes
+Əgər sizin platforma və arxitekturanız dəstəklənirsə, Rollup artıq avtomatik olaraq [ixtiyari npm asılılığı](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#optionaldependencies) kimi əlavə edilə və silinə bilən doğma kodları da əhatə edir. Daha dəqiq desək, Rollup-ın yalnızca bəlli [`os`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#os) və [`cpu`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#cpu) mövcud olan zaman yüklənən asılılıqlardan ibarət bir `optionalDependencies` siyahısı mövcuddur. Əgər sisteminiz dəstəklənmirsə, Rollup-ı başladan zaman sizin platformanız və arxitekturanız haqqında məlumat və dəstəklənən sistemlərin bir siyahısından ibarət xəta mesajı əldə edəcəksiniz. Belə olan halda bütün platformalar üçün əlçatan olan `@rollup/wasm-node` kitabxanasından əvəzedici kimi istifadə edə bilərsiniz.
 
-Rollup now includes native code that is automatically installed (and removed) as an [optional npm dependency](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#optionaldependencies) if your platform and architecture is supported. More precisely, Rollup has a list of `optionalDependencies`, each of which only install on a specific [`os`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#os) and [`cpu`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#cpu). If your system is not supported, you will receive an error message when starting Rollup that will tell you about your platform and architecture and gives you a list of supported ones. In that case, you can instead use `@rollup/wasm-node` as a platform-independent drop-in replacement.
+Brauzer inşası isə (`@rollup/browser`) artıq ayrıca qeyd edilməli olan WASM artefaktına əsaslanır. Əgər siz Vite ilə birgə brauzer inşasından istifadə edirsinizsə, `optimizeDeps.exclude` siyahısına `"@rollup/browser"` asılılığını əlavə etməyiniz lazım gələcək, əks halda `npm run dev` komandası `.wasm` faylına gedən etibarsız yoldan ötürü uğursuz olacaq (həmçinin baxın: [vitejs #14609](https://github.com/vitejs/vite/issues/14609)). Bundan başqa, xüsusi bir müdaxiləyə ehtiyac duyulmadan hər şey öz qaydasında işləməlidir.
 
-The browser build (`@rollup/browser` on NPM) now relies on a WASM artifact that needs to be provided as well. If you are using the browser build with Vite, you'll need to add `"@rollup/browser"` to `optimizeDeps.exclude`, otherwise `npm run dev` fails with an invalid path to the `.wasm` file (see also [vitejs #14609](https://github.com/vitejs/vite/issues/14609)). Otherwise it should work without any specific intervention.
+Bunlara əlavə olaraq, Rollup ilə bağlı nəzərə çarpan digər bir dəyişiklik isə əvvəlki 16-lıq say sistemli çözənəklərin ("hash") yeni 64-lük say sistemindəki çözənəklərlə əvəz olunmasıdır. Beləliklə çözənəklər artıq daha təhlükəsizdir, ancaq texniki səbəblərdən ötürü maksimal çözənək uzunluğu 22 simvoldur.
 
-Otherwise, an obvious change is that Rollup now uses url-safe base64 hashes in file names instead of the older base16 hashes. This provides more hash safety but means that hash length is now limited to at most 22 characters for technical reasons.
+KSİ tətbiqləri hazırlayarkən əgər çıxış [`format`](../configuration-options/index.md#output-format)-ı `es`, yaxud `cjs` olarsa, Rollup avtomatik olaraq `#!` şərhlərini qoruyacaq. Əvvəllər isə bu, şərhi plagin vasitəsilə əlavə etməklə mümkün olurdu.
 
-When bundling CLI apps, Rollup will now automatically preserve shebang comments in entry files if the output [`format`](../configuration-options/index.md#output-format) is `es` or `cjs`. Previously, you would have needed to add the comment via a plugin.
+Sonda onu qeyd etmək istərdik ki, siz etibarsız annotasiya mövqeləri ilə bağlı bir sıra yeni xəbərdarlıqlarla qarşılaşa bilərsiniz. Bundan sonra Rollup əgər düzgün yerləşdirilmədiyi üçün işə salına bilməyən [`@__PURE__`](../configuration-options/index.md#pure), yaxud [`@__NO_SIDE_EFFECTS__`](../configuration-options/index.md#no-side-effects) şərhləri tapsa, sizə xəbərdarlıq göndərəcək. Bunlar isə debaq prosesində sizə kömək edəcəkdir. Onları susdurmaq istəsəniz, [`--filter-logs`](../command-line-interface/index.md#filterlogs-filter) KSİ parametri sizə yardım edə bilər.
 
-Last, you may see some new warnings about invalid annotation positions. Rollup will now warn if it finds a [`@__PURE__`](../configuration-options/index.md#pure) or [`@__NO_SIDE_EFFECTS__`](../configuration-options/index.md#no-side-effects) comment that it cannot interpret as it is in an invalid location. These warnings are meant to help debugging. To silence them, the [`--filter-logs`](../command-line-interface/index.md#filterlogs-filter) CLI option can help you.
+## Konfiqurasiya dəyişiklikləri {#configuration-changes}
 
-## Configuration Changes
+Rollup 3-də artıq köhnəlmiş bir sıra seçimlər birdəfəlik yığışdırılsa da, yeganə irihəcmli dəyişiklik `acorn` və `acornInjectPlugin` seçimlərinin əlçatan olmamağıdır. Bu isə o deməkdir ki, təəssüf ki, siz artıq dəstəklənməyən sintaksislər üçün plaginlər əlavə edə bilməyəcəksiniz. Tələbdən asılı olaraq biz JSX sintaksisini SWC təhliledicisininki kimi yenidən dəstəkləyə bilərik.
 
-While some options that were already deprecated in Rollup 3 have been removed, the only major change here is that we no longer have the `acorn` and `acornInjectPlugin` options available. This means, unfortunately, that you can no longer add plugins for unsupported syntax. Depending on demand, we consider supporting JSX syntax again as the SWC parser would support that.
+## Plagin proqramlaşdırma interfeysinə dəyişikliklər {#changes-to-the-plugin-api}
 
-## Changes to the Plugin API
+Mühüm bir dəyişiklik odur ki, [`this.resolve()`](../plugin-development/index.md#this-resolve) bundan sonra defolt şəkildə `skipSelf: true` parametrini əlavə edəcək. Bu da o deməkdir ki, [`resolveId`](../plugin-development/index.md#resolveid) qarmağından `this.resolve()` çağıran zaman qarmaq buradan, yaxud müxtəlif `source` və ya `importer` təyin edilməyibsə, digər plaginlərdəki `this.resolve()` funksiyalarından yenidən işə salınmayacaq. Aşkar edilib ki, bu, istənilməyən sonsuz döngələrin qarşısını alan, əlverişli defoltdur. Əvvəlki iş prinsipini yenidən quraşdırmaq istəyirsinizsə, `skipSelf: false` parametrini özünüz əlavə edə bilərsiniz.
 
-An important change is that [`this.resolve()`](../plugin-development/index.md#this-resolve) will now by default add `skipSelf: true`. That means when calling `this.resolve()` from a [`resolveId`](../plugin-development/index.md#resolveid) hook, this hook will not be called again by this or further nested `this.resolve()` calls from other plugins unless they use a different `source` or `importer`. We found that this is a reasonable default for most plugins that prevents unintended infinite loops. To get the old behaviour, you can manually add `skipSelf: false`.
+Digər bir mühüm fərq isə ondadır ki, Rollup izləmə modu bundan sonra plaginlərin [`load`](../plugin-development/index.md#load) qarmağı ilə yüklənən faylların identifikatorlarını izləməyəcək. Bu, əsasən, "virtual" fayllara təsir göstərəcək, harada ki, sərt disk dəyişikliklərini izləməyə ehtiyac yoxdur. Bunun əvəzinə `load` qarmağını istifadə edən plaginlər özləri sözügedən qarmaqdan asılı olan hər bir fayl üçün ayrıca [`this.addWatchFile()`](../plugin-development/index.md#this-addwatchfile) funksiyasını işə salmalıdırlar.
 
-Another important change is that Rollup watch mode will no longer watch ids of files that have been loaded via a plugin [`load`](../plugin-development/index.md#load) hook. So this mainly affects "virtual" files, where it really does not make sense to watch a hard drive location for changes. Instead, it is now up to plugins that use a `load` hook to manually call [`this.addWatchFile()`](../plugin-development/index.md#this-addwatchfile) for all the files they depend on to handle the `load` hook.
+Əgər sizin plagininiz idxalat yoxlamalarını yerinə yetirirsə, qeyd etmək lazımdır ki, JavaScript xüsusiyyətinin adı dəyişdiyi üçün [`resolveId`](../plugin-development/index.md#resolveid) qarmağında və digər yerlərdə `assertions` parametri `attributes` ilə əvəz olunub. Həmçinin idxalat atributlarının abstrakt sintaksisli ağac təsviri [ESTree nizamnaməsinə](https://github.com/estree/estree/blob/7a0c8fb02a33a69fa16dbe3ca35beeaa8f58f1e3/experimental/import-attributes.md) uyğunlaşdırılıb.
 
-If your plugin handles import assertions, note that in the [`resolveId`](../plugin-development/index.md#resolveid) hook and other places, `assertions` have been replaced with `attributes` as the JavaScript feature was also renamed. Also, the abstract syntax tree representation of import attributes now follows the [ESTree spec](https://github.com/estree/estree/blob/7a0c8fb02a33a69fa16dbe3ca35beeaa8f58f1e3/experimental/import-attributes.md) again.
+Əgər plaginləriniz xəbərdarlıqlar qaytaracaqsa, bundan sonra [`buildStart`](../plugin-development/index.md#buildstart) qarmağında `options.onwarn()` funksiyasını çağıra bilməzsiniz. Bunun əvəzində [`this.warn()`](../plugin-development/index.md#load) və ya [`options.onLog()`](../configuration-options/index.md#onlog) funksiyalarından istifadə edə bilərsiniz.
 
-If you want to emit warnings from your plugin, you can no longer call `options.onwarn()` in the [`buildStart`](../plugin-development/index.md#buildstart) hook. Instead, either use [`this.warn()`](../plugin-development/index.md#load) or [`options.onLog()`](../configuration-options/index.md#onlog).
+## Rollup 3-ə keçid {#migrating-to-rollup-3}
 
-## Migrating to Rollup 3
+Bu, Rollup 2-dən Rollup 3-ə keçən zaman rastlaşacağınız əsas nüanslardan ibarət siyahıdır. Mühüm fərqlərin tam siyahısını görmək üçün [Rollup 3 dəyişiklik qeydlərinə](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#300) nəzər yetirməyiniz tövsiyə olunur.
 
-This is a list of the most important topics you may encounter when migrating from Rollup 2 to Rollup 3. For a full list of breaking changes, we advise you to consult the
+Rollup 1, yaxud daha köhnə bir versiyadan keçid edirsinizsə, həmçinin [Rollup 2](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#200) və [Rollup 1 dəyişiklik qeydlərinə](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#100) də nəzər salın.
 
-- [Rollup 3 changelog](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#300)
+### İlkin ehtiyaclar {#prerequisites-1}
 
-When migrating from Rollup 1 or earlier, see also
+Hər şeydən əvvəl, Node.js-in ən aşağısı 14.18.0 versiyasını quraşdırmağınıza və bütün Rollup plaginlərinin ən yeni versiyalarından istifadə etməyinizə əmin olmalısınız.
 
-- [Rollup 2 changelog](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#200)
-- [Rollup 1 changelog](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#100)
+Nisbətən böyük ölçülü konfiqurasiyalar üçün yaxşı olar ki, birinci `rollup@2.79.1` versiyasını quraşdırıb, konfiqurasiyanıza [`strictDeprecations`](../configuration-options/index.md#strictdeprecations) parametrini əlavə edib yaranan xətaları aradan götürəsiniz. Beləliklə, siz əmin ola bilərsiniz ki, Rollup 3-də etibarsız hala gələn xüsusiyyətlərdən istifadə etmirsiniz. Əgər plaginlərlə bağlı problemlər yaranarsa, plagin müəllifləri ilə əlaqə saxlaya bilərsiniz.
 
-### Prerequisites
+### Konfiqurasiya fayllarından istifadə {#using-configuration-files}
 
-Make sure you run at least Node 14.18.0 and update all your Rollup plugins to their latest versions.
+Əgər konfiqurasiya faylı kimi ES modulundan, o cümlədən `import` və `export` sintaksisindən istifadə edirsinizsə, dəqiq yoxlamalısınız ki, Node sizin konfiqurasiyanızı ES modulu kimi yükləyir.
 
-For larger configs, it can make sense to update to `rollup@2.79.1` first, add the [`strictDeprecations`](../configuration-options/index.md#strictdeprecations) option to your config and resolve any errors that pop up. That way you can make sure you do not rely on features that may have been removed in Rollup 3. If you have errors in your plugins, please contact the plugin author.
+Bunun ən rahat yolu isə fayl uzantısını `.mjs` kimi təyin eləməkdir. Konfiqurasiya faylları haqqında daha ətraflı məlumatı [buradan](../command-line-interface/index.md#configuration-files) ala bilərsiniz.
 
-### Using Configuration Files
+Doğma Node ES modullarından istifadə edərkən bilməli olduğunuz bir sıra digər nüanslar da var; ən vacibləri bunlardır:
 
-If you are using an ES module as configuration file, i.e. `import` and `export` syntax, you need to make sure Node will be loading your configuration as an ES module.
+- `package.json` faylını birbaşa idxal edə bilməzsiniz;
+- faylın mövcud olduğu qovluğun adını `__dirname` vasitəsilə əldə edə bilməzsiniz.
 
-The easiest way to ensure that is to change the file extension to `.mjs`, see also [Configuration Files](../command-line-interface/index.md#configuration-files).
+Bu mövzularla əlaqədar kömək lazım olarsa, [buraya](../command-line-interface/index.md#caveats-when-using-native-node-es-modules) baş çəkə bilərsiniz.
 
-There are some additional caveats when using native Node ES modules, most notably
+Əvvəlki konfiqurasiya formatını saxlamaq istəsəniz, [`--bundleConfigAsCjs`](../command-line-interface/index.md#bundleconfigascjs) parametrindən istifadə edə bilərsiniz.
 
-- you cannot simply import your `package.json` file
-- you cannot use `__dirname` to get the current directory
+Əgər [`--configPlugin`](../command-line-interface/index.md#configplugin-plugin) parametrindən istifadə etsəniz, Rollup konfiqurasiyanızı oxumazdan əvvəl onu CommonJS əvəzinə ES modulu kimi bandl edəcək. Beləliklə, siz asanlıqla konfiqurasiyanızdan ES modullarını idxal edə bilərsiniz. Bu zaman isə doğma ES modullarındakı nüanslarla üzləşəcəksiniz, məsələn, `__dirname`-dən istifadə etmək mümkün olmayacaq. Yenə də, ənənəvi yükləmə tərzini saxlamaq istəyirsinizsə, [`--bundleConfigAsCjs`](../command-line-interface/index.md#bundleconfigascjs) parametrindən istifadə edə bilərsiniz.
 
-[Caveats when using native Node ES modules](../command-line-interface/index.md#caveats-when-using-native-node-es-modules) will give you some alternatives for how to handle these things.
+### Dəyişdirilmiş defoltlar {#changed-defaults}
 
-Alternatively you can pass the [`--bundleConfigAsCjs`](../command-line-interface/index.md#bundleconfigascjs) option to force the old loading behavior.
-
-If you use the [`--configPlugin`](../command-line-interface/index.md#configplugin-plugin) option, Rollup will now bundle your configuration as an ES module instead of CommonJS before running it. This allows you to easily import ES modules from your configuration but has the same caveats as using a native ES module, e.g. `__dirname` will no longer work. Again, you can pass the [`--bundleConfigAsCjs`](../command-line-interface/index.md#bundleconfigascjs) option to force the old loading behavior.
-
-### Changed Defaults
-
-Some options now have different default values. If you think you experience any issues, try adding the following to your configuration:
+Bir sıra seçimlərin defolt dəyərləri artıq dəyişib. Əgər bununla əlaqədar problemlə üzləşdiyinizi düşünürsünüzsə, aşağıdakı kodu konfiqurasiyanıza əlavə edə bilərsiniz:
 
 ```js
 ({
@@ -97,22 +90,22 @@ Some options now have different default values. If you think you experience any 
 });
 ```
 
-In general, though, the new default values are our recommended settings. Refer to the documentation of each setting for more details.
+Ümumiyyətlə isə, yeni defolt dəyərlər bizim tövsiyə etdiyimiz tənzimləmələrdir. Hər bir tənzimləmə haqqında ətraflı məlumat üçün onların dokumentasiyasına baş çəkə bilərsiniz.
 
-### More Changed Options
+### Dəyişdirilmiş digər seçimlər {#more-changed-options}
 
-- [`output.banner/footer`](../configuration-options/index.md#output-banner-output-footer)[`/intro/outro`](../configuration-options/index.md#output-intro-output-outro) are now called per chunk and thus should not do any performance-heavy operations.
-- [`entryFileNames`](../configuration-options/index.md#output-entryfilenames) and [`chunkFileNames`](../configuration-options/index.md#output-chunkfilenames) functions no longer have access to the rendered module information via `modules`, but only to a list of included `moduleIds`.
-- When using [`output.preserveModules`](../configuration-options/index.md#output-preservemodules) and `entryFileNames`, you can no longer use the `[ext]`, `[extName]` and `[assetExtName]` file name placeholders. Also, the path of a module is no longer prepended to the file name automatically but is included in the `[name]` placeholder.
+- [`output.banner/footer`](../configuration-options/index.md#output-banner-output-footer)[`/intro/outro`](../configuration-options/index.md#output-intro-output-outro) artıq blok başına işə salınır və performansa təsir göstərə biləcək, ağır iş yerinə yetirməmələri tövsiyə olunur;
+- [`entryFileNames`](../configuration-options/index.md#output-entryfilenames) və [`chunkFileNames`](../configuration-options/index.md#output-chunkfilenames) funksiyalarının daha `modules` vasitəsilə yüklənmiş modul barədə informasiyaya keçidi yoxdur, ancaq `moduleIds` vasitəsilə modul identifikatorlarının siyahısından istifadə edə bilərlər;
+- [`output.preserveModules`](../configuration-options/index.md#output-preservemodules) və `entryFileNames`-dən istifadə edən zaman daha `[ext]`, `[extName]` və `[assetExtName]` fayl adı şablonlarından ("placeholder") istifadə edə bilməzsiniz. Həmçinin, bir modulun mövqeyi avtomatik olaraq fayl adına yazılmır, ancaq `[name]`-in tərkibində mövcuddur.
 
-### Dynamic Import in CommonJS Output
+### CommonJS çıxışında dinamik idxalat {#dynamic-import-in-commonjs-output}
 
-By default, when generating `cjs` output, Rollup will now keep any external, i.e. non-bundled, dynamic imports as `import(…)` expressions in the output. This is supported in all Node versions starting with Node 14 and allows to load both CommonJS and ES modules from generated CommonJS output. If you need to support older Node versions, you can pass [`output.dynamicImportInCjs: false`](../configuration-options/index.md#output-dynamicimportincjs).
+Defolt olaraq `cjs` çıxışı yaradan zaman Rollup artıq hər hansı xarici — bandl olunmamış, `import(…)` kimi dinamik idxalat ifadələrini çıxışa əlavə edəcək. Bu, 14-dən başlayaraq bütün Node versiyalarında əlçatandır və yaradılmış CommonJS çıxışından həm CommonJS, həm də ES modullarını yükləməyə imkan yaradır. Daha köhnə Node versiyalarını dəstəkləmək istəsəniz, [`output.dynamicImportInCjs: false`](../configuration-options/index.md#output-dynamicimportincjs) parametrindən istifadə edə bilərsiniz.
 
-### Changes to the Plugin API
+### Plagin proqramlaşdırma interfeysinə dəyişikliklər {#changes-to-the-plugin-api-1}
 
-Then general output generation flow has been reworked, see the [Output Generation Hooks](../plugin-development/index.md#output-generation-hooks) graph for the new plugin hook order. Probably the most obvious change is that the [`banner`](../plugin-development/index.md#banner)/[`footer`](../plugin-development/index.md#footer)/[`intro`](../plugin-development/index.md#intro)/[`outro`](../plugin-development/index.md#outro) are no longer invoked once at the beginning but rather per chunk. On the other hand, [`augmentChunkHash`](../plugin-development/index.md#augmentchunkhash) is now evaluated after [`renderChunk`](../plugin-development/index.md#renderchunk) when the hash is created.
+Çıxış yaradılması axışı başdan yazılıb, yeni plagin qarmağı sıralaması üçün [Çıxış Yaradılması Qarmaqları](../plugin-development/index.md#output-generation-hooks) səhifəsinə baxa bilərsiniz. Ən çox gözə çarpan dəyişikliklərdən biri isə [`banner`](../plugin-development/index.md#banner)/[`footer`](../plugin-development/index.md#footer)/[`intro`](../plugin-development/index.md#intro)/[`outro`](../plugin-development/index.md#outro) artıq əvvəldə yox, blok başına işə salınır. Digər tərəfdən, çözənək yaradılan zaman [`augmentChunkHash`](../plugin-development/index.md#augmentchunkhash) daha [`renderChunk`](../plugin-development/index.md#renderchunk)-dan sonra işə salınır.
 
-As file hashes are now based on the actual content of the file after `renderChunk`, we no longer know exact file names before hashes are generated. Instead, the logic now relies on hash placeholders of the form `!~{001}~`. That means that all file names available to the `renderChunk` hook may contain placeholders and may not correspond to the final file names. This is not a problem though if you plan on using these files names within the chunks as Rollup will replace all placeholders before [`generateBundle`](../plugin-development/index.md#generatebundle) runs.
+Fayl çözənəkləri faylın `renderChunk`-dan sonrakı əsl kontenti əsasında formalaşdığı üçün çözənəklər yaradılana qədər dəqiq fayl adları qeyri-məlum olur. Bunun əvəzinə, iş məntiqi `!~{001}~` formatındakı çözənək şablonlarına əsaslanır. Bu da o deməkdir ki, `renderChunk` qarmağına məlum olan fayl adları şablonlar ehtiva edə bilər və son fayl adından fərqli ola bilər. Yenə də, bu, əgər siz bu fayl adlarından bloklar daxilində istifadə edəcəksinizsə, problem yaratmayacaq, çünki Rollup [`generateBundle`](../plugin-development/index.md#generatebundle) işə salınmazdan əvvəl bütün şablonları aradan qaldıracaq.
 
-Not necessarily a breaking change, but plugins that add or remove imports in [`renderChunk`](../plugin-development/index.md#renderchunk) should make sure they also update the corresponding `chunk` information that is passed to this hook. This will enable other plugins to rely on accurate chunk information without the need to pare the chunk themselves. See the [documentation](../plugin-development/index.md#renderchunk) of the hook for more information.
+O qədər də mühüm bir dəyişiklik olmasa da, [`renderChunk`](../plugin-development/index.md#renderchunk) daxilində idxalat əlavə edən, yaxud silən plaginlər sözügedən qarmağa ötürülən `chunk` məlumatını da yeniləməlidirlər. Bu, digər plaginlərin kod blokları haqqında onları "eşələmədən" dəqiq məlumata sahib olmalarına imkan yaradacaq. Ətraflı məlumat üçün bu qarmağın [dokumentasiyasına](../plugin-development/index.md#renderchunk) baxa bilərsiniz.

@@ -116,7 +116,7 @@ async function generateOutputs(bundle) {
 				//     };
 				//   },
 				//   name: string                   // adlandırma sxemlərində blokun adı
-				//   preliminaryFileName: string    // çözənək ("hash") yertutucular daxil edilməklə faylın ilkin adı
+				//   preliminaryFileName: string    // çözənək ("hash") şablonlar ("placeholder") daxil edilməklə faylın ilkin adı
 				//   referencedFiles: string[]      // "import.meta.ROLLUP_FILE_URL_<id>" ilə istinad edilən fayllar
 				//   type: 'chunk',                 // obyektin blok olduğunu göstərir
 				// }

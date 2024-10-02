@@ -16,7 +16,7 @@ hero:
 features:
   - icon: 🌍
     title: Veb, Node…
-    details: Rollup ES modulları, CommonJS, UMD, SystemJS və s. kimi bir çox ixrac formatlarını dəstəkləyir. Yalnızca veb üçün deyil, bir sıra digər platformlar üçün də bandl edir.
+    details: Rollup ES modulları, CommonJS, UMD, SystemJS və s. kimi bir çox ixrac formatlarını dəstəkləyir. Yalnızca veb üçün deyil, bir sıra digər platformalar üçün də bandl edir.
     link: /configuration-options/#output-format
     linkText: Bütün formatlara baxın
   - icon: 🌳
