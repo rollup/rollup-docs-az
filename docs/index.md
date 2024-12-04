@@ -36,7 +36,7 @@ features:
     linkText: Plagin yazmağı öyrənin
   - icon: 🛠️
     title: Xüsusi ehtiyaclarınıza uyğunlaşır
-    details: Rollup bir qəliblə məhdudlaşmayıb. Çoxsaylı konfiqurasiya seçimləri və zəngin plagin interfeysi Rollup-ı xüsusi iş axınları və yüksək səviyyəli tulinq üçün ideal bandler edir.
+    details: Rollup bir qəliblə məhdudlaşmayıb. Çoxsaylı konfiqurasiya seçimləri və zəngin plagin interfeysi Rollup-ı xüsusi iş axınları və təkmilləşmiş tulinq ("tooling") üçün ideal bandler edir.
     link: /configuration-options/
     linkText: Konfiqurasiya seçimlərinə baxın
   - icon:

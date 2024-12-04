@@ -88,7 +88,7 @@ node
 
 Təbrik edirik! Siz Rollup ilə ilk bandlınızı yaratdınız.
 
-## Konfiqurasiya fayllarından istifadə etmək {#using-config-files}
+## Konfiqurasiya fayllarından istifadə {#using-config-files}
 
 Hələ ki, yaxşı gedirik, ancaq bir neçə parametr daha əlavə eləsək, komandaları yazmaq bir qədər vaxt aparacaq.
 
@@ -178,7 +178,7 @@ Tövsiyə edilir ki, kitabxananı yükləyəndən sonra `package.json` faylına 
 
 _Qeyd: Lokal şəkildə yüklənəndə həm NPM, həm də Yarn kitabxananın binar faylını emal edəcək və hansısa paket skriptindən çağrılanda Rollup-ı işə salacaq._
 
-## Plaginlərdən istifadə etmək {#using-plugins}
+## Plaginlərdən istifadə {#using-plugins}
 
 Hələ ki, biz bir giriş nöqtəsi və nisbi fayl mövqeyi vasitəsilə idxal edilən bir moduldan ibarət sadə bir bandl yaratmışıq. Sizə isə daha mürəkkəb bandllar yaratdıqca daha çox elastiklik lazım olacaq, məsələn: NPM ilə yüklənmiş modulları idxal etmək, Babel ilə kodu kompilyasiya etmək, JSON faylları ilə işləmək və s.
 
@@ -262,7 +262,7 @@ Gəlin bayaqkı nümunəni genişləndirək və bir kiçildilmiş, bir də kiçi
 npm install --save-dev @rollup/plugin-terser
 ```
 
-`rollup.config.mjs` faylını ikinci bir kiçildilmiş çıxış yaradılması üçün redaktə edin. Format kimi `iife` təyin edəcəyik, beləcə kod yığcamlaşdırılır və brauzerdə `script` teqi vasitəsilə digər kodla toqquşmadan istifadə edilə bilir. Bizim kodumuzda bir ədəd ixracat mövcuddur və savayı kodların bu ixracatdan istifadə edə bilməsi üçün bandl zamanı ona təyin edilmiş qlobal dəyişkən yaradılacaq, buna görə də biz həmin dəyişkən üçün ad təyin etməliyik.
+`rollup.config.mjs` faylını ikinci bir kiçildilmiş çıxış yaradılması üçün redaktə edin. Format kimi `iife` təyin edəcəyik, beləcə kod yığcamlaşdırılır və brauzerdə `script` teqi vasitəsilə digər kodla toqquşmadan istifadə edilə bilir. Bizim kodumuzda bir ədəd ixracat mövcuddur və savayı kodların bu ixracatdan istifadə edə bilməsi üçün bandl zamanı ona təyin edilmiş qlobal dəyişən yaradılacaq, buna görə də biz həmin dəyişən üçün ad təyin etməliyik.
 
 ```js twoslash
 // rollup.config.mjs

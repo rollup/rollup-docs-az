@@ -7,6 +7,7 @@ import replaceBrowserModules from '../../build-plugins/replace-browser-modules';
 import '../declarations.d';
 import { examplesPlugin } from './create-examples';
 import { renderMermaidGraphsPlugin } from './mermaid';
+import { replacePathPicomatch } from './replace-path-picomatch';
 import { transposeTables } from './transpose-tables';
 import { buildEnd, callback, transformPageData } from './verify-anchors';
 
@@ -84,7 +85,7 @@ export default defineConfig({
 		},
 		logo: '/rollup-logo.svg',
 		nav: [
-			{ link: '/introduction/', text: 'yolgöstərici' },
+			{ link: '/introduction/', text: 'bələdçi' },
 			{ link: '/repl/', text: 'repl' },
 			{ link: 'https://is.gd/rollup_chat', text: 'söhbət' },
 			{ link: 'https://opencollective.com/rollup', text: 'opencollective' }
@@ -184,7 +185,10 @@ export default defineConfig({
 	title: 'Rollup',
 	transformPageData,
 	vite: {
+		optimizeDeps: { exclude: ['@rollup/pluginutils'] },
 		plugins: [
+			replacePathPicomatch(),
+			replaceBrowserModules(),
 			renderMermaidGraphsPlugin(),
 			replaceBrowserModules(),
 			{

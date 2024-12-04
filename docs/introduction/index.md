@@ -75,14 +75,14 @@ const query = 'Rollup';
 ajax(`https://api.example.com?search=${query}`).then(handleResponse);
 ```
 
-Rollup mümkün qədər minimal kod daxil etdiyi üçün daha yüngül, daha sürətli və daha az mürəkkəb kitabxanalar və tətbiqlər yaradır. Beləliklə, birbaşa `import` və `export` bəyanatlarından istifadə edildiyi üçün kompilyasiya edilmiş kodda istifadə edilməyən dəyişkənləri avtomatik kiçildici ilə aşkar etməkdən daha əlverişli bir üsul alınır.
+Rollup mümkün qədər minimal kod daxil etdiyi üçün daha yüngül, daha sürətli və daha az mürəkkəb kitabxanalar və tətbiqlər yaradır. Beləliklə, birbaşa `import` və `export` bəyanatlarından istifadə edildiyi üçün kompilyasiya edilmiş kodda istifadə edilməyən dəyişənləri avtomatik kiçildici ilə aşkar etməkdən daha əlverişli bir üsul alınır.
 
-## Uyğunluq {#compatibility}
+## Uyumluluq {#compatibility}
 
 ### CommonJS idxalatı {#importing-commonjs}
 
 Rollup [plagin vasitəsilə](https://github.com/rollup/plugins/tree/master/packages/commonjs) mövcud CommonJS modullarını idxal edə bilər.
 
-### ES modullarının yayımlanması {#publishing-es-modules}
+### ES modulları yayımlamaq {#publishing-es-modules}
 
 ES modullarınızın Node.js, yaxud webpack kimi CommonJS ilə işləyən alətlər tərəfindən istifadə edilə bilməsini təmin etmək üçün Rollup ilə UMD, yaxud CommonJS formatlarına kompilyasiya edib `package.json` faylındakı `main` parametrinə həmin kompilyasiya edilmiş faylı təyin edə bilərsiniz. Əgər `package.json` faylınızda `module` da təyin edilibsə, [webpack 2+](https://webpack.js.org/) və Rollup kimi ES modulunu tanıyan alətlər [birbaşa ES modulunu idxal edəcək](https://github.com/rollup/rollup/wiki/pkg.module).

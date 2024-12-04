@@ -53,7 +53,10 @@ async function build() {
 	let bundle;
 	let buildFailed = false;
 	try {
-		// bandl yaradın
+		// Bandl yaradın. Əgər siz TypeScript, yaxud onu dəstəkləyən bir iş mühitdən istifadə edirsinizsə,
+    // əvəzində bunu yaza bilərsiniz, beləliklə bandlı aşağıda ayrıca bağlamağa ehtiyac qalmayacaq:
+		//
+		// await using bundle = await rollup(inputOptions);
 		bundle = await rollup(inputOptions);
 
 		// bandlın asılı olduğu fayl adlarından ibarət siyahı
@@ -96,7 +99,7 @@ async function generateOutputs(bundle) {
 				// {
 				//   code: string,                  // yaradılan JS kodu
 				//   dynamicImports: string[],      // blok tərəfindən dinamik idxal edilən xarici modullar
-				//   exports: string[],             // ixrac edilən dəyişkən adları
+				//   exports: string[],             // ixrac edilən dəyişən adları
 				//   facadeModuleId: string | null, // blokun uyğun gəldiyi müvafiq modulun identifikator nömrəsi
 				//   fileName: string,              // blokun fayl adı
 				//   implicitlyLoadedBefore: string[]; // yalnız bu blokdan sonra yüklənə biləcək daxiletmələr
@@ -108,8 +111,8 @@ async function generateOutputs(bundle) {
 				//   map: string | null,            // varsa, mənbə xəritəsi
 				//   modules: {                     // blokdakı modullar haqqında məlumat
 				//     [id: string]: {
-				//       renderedExports: string[]; // ixrac edilən dəyişkənlərdən saxlanılanların adları
-				//       removedExports: string[];  // ixrac edilən dəyişkənlərdən silinənlərin adları
+				//       renderedExports: string[]; // ixrac edilən dəyişənlərdən saxlanılanların adları
+				//       removedExports: string[];  // ixrac edilən dəyişənlərdən silinənlərin adları
 				//       renderedLength: number;    // moduldakı qalan kodun uzunluğu
 				//       originalLength: number;    // moduldakı əsl kodun uzunluğu
 				//       code: string | null;       // modulda qalan kod
@@ -142,7 +145,7 @@ const inputOptions = {
 	input, // şərti məcbur
 	plugins,
 
-	// yüksək səviyyəli giriş seçimləri
+	// təkmilləşmiş giriş seçimləri
 	cache,
 	logLevel,
 	makeAbsoluteExternalsRelative,
@@ -183,7 +186,7 @@ const outputOptions = {
 	name,
 	plugins,
 
-	// yüksək səviyyəli çıxış seçimləri
+	// təkmilləşmiş çıxış seçimləri
 	assetFileNames,
 	banner,
 	chunkFileNames,
@@ -208,6 +211,7 @@ const outputOptions = {
 	preserveModulesRoot,
 	sourcemap,
 	sourcemapBaseUrl,
+	sourcemapDebugIds,
 	sourcemapExcludeSources,
 	sourcemapFile,
 	sourcemapFileNames,
@@ -362,7 +366,7 @@ loadConfigFile(path.resolve(__dirname, 'rollup.config.js'), {
 });
 ```
 
-## Yüksək səviyyəli qeydiyyat filtrlərinin tətbiqi {#applying-advanced-log-filters}
+## Təkmilləşmiş qeydiyyat filtrlərinin tətbiqi {#applying-advanced-log-filters}
 
 Komanda sətri interfeysi [`--filterLogs`](../command-line-interface/index.md#filterlogs-filter) sayəsində qeydləri filtrləməyə şərait yaratsa da, bu xüsusiyyət JavaScript proqramlaşdırma interfeysində əlçatan deyil. Buna baxmayaraq, JavaScript proqramlaşdırma interfeysində komanda sətrindəki ilə eyni sintaksisdən istifadə edərək filtrləşdirmə əməliyyatı aparmağınız üçün Rollup `getLogFilter` köməkçisini sizə ixrac edir. Bu, öz fərdi `onLog` emalçınız olan zaman, yaxud üçüncü tərəf sistemlərdə Rollup-ın komanda sətri interfeysi ilə bənzər filtrləmə mexanizmi yaratmaq istəyəndə sizə kifayət qədər kömək edəcək. Funksiya mətn tipli verilənlərdən ibarət siyahı qəbul edir. Qeyd etmək lazımdır ki, bu köməkçi KSİ-dən fərqli olaraq, vergüllə ayrılan filtr siyahılarını bölüşdürmür.
 

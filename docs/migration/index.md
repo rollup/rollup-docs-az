@@ -22,7 +22,7 @@ Nisbətən böyük ölçülü konfiqurasiyalar üçün yaxşı olar ki, birinci 
 
 Brauzer inşası isə (`@rollup/browser`) artıq ayrıca qeyd edilməli olan WASM artefaktına əsaslanır. Əgər siz Vite ilə birgə brauzer inşasından istifadə edirsinizsə, `optimizeDeps.exclude` siyahısına `"@rollup/browser"` asılılığını əlavə etməyiniz lazım gələcək, əks halda `npm run dev` komandası `.wasm` faylına gedən etibarsız yoldan ötürü uğursuz olacaq (həmçinin baxın: [vitejs #14609](https://github.com/vitejs/vite/issues/14609)). Bundan başqa, xüsusi bir müdaxiləyə ehtiyac duyulmadan hər şey öz qaydasında işləməlidir.
 
-Bunlara əlavə olaraq, Rollup ilə bağlı nəzərə çarpan digər bir dəyişiklik isə əvvəlki 16-lıq say sistemli çözənəklərin ("hash") yeni 64-lük say sistemindəki çözənəklərlə əvəz olunmasıdır. Beləliklə çözənəklər artıq daha təhlükəsizdir, ancaq texniki səbəblərdən ötürü maksimal çözənək uzunluğu 22 simvoldur.
+Bunlara əlavə olaraq, Rollup ilə bağlı nəzərə çarpan digər bir dəyişiklik isə əvvəlki 16-lıq say sistemli çözənəklərin ("hash") yeni 64-lük say sistemindəki çözənəklərlə əvəz olunmasıdır. Beləliklə çözənəklər artıq daha təhlükəsizdir, ancaq texniki səbəblərdən ötürü maksimal çözənək uzunluğu 21 simvoldur.
 
 KSİ tətbiqləri hazırlayarkən əgər çıxış [`format`](../configuration-options/index.md#output-format)-ı `es`, yaxud `cjs` olarsa, Rollup avtomatik olaraq `#!` şərhlərini qoruyacaq. Əvvəllər isə bu, şərhi plagin vasitəsilə əlavə etməklə mümkün olurdu.
 
