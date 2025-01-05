@@ -8,17 +8,17 @@ hero:
   image: /rollup-logo.svg
   actions:
     - theme: brand
-      text: Başlayın
+      text: Başla
       link: /introduction/
     - theme: alt
-      text: GitHub-da baxın
+      text: GitHub-da bax
       link: https://github.com/rollup/rollup
 features:
   - icon: 🌍
     title: Veb, Node…
     details: Rollup ES modulları, CommonJS, UMD, SystemJS və s. kimi bir çox ixrac formatlarını dəstəkləyir. Yalnızca veb üçün deyil, bir sıra digər platformalar üçün də bandl edir.
     link: /configuration-options/#output-format
-    linkText: Bütün formatlara baxın
+    linkText: Bütün formatlara bax
   - icon: 🌳
     title: Tri-şeykinq
     details: Tri-şeykinqi JavaScript-ə bəxş edən texnologiya ilə kodun icra mövqeyinin dərin analizi əsasında ölü kodları təmizləyir.
@@ -33,16 +33,16 @@ features:
     title: Güclü plaginlər
     details: Öyrənməyin asan olduğu proqramlaşdırma interfeysi ("API") sizə az kodla çox nəticə əldə etməyinizə imkan yaradır. Vite və WMR bu texnologiyadan istifadə edir.
     link: /plugin-development/#plugins-overview
-    linkText: Plagin yazmağı öyrənin
+    linkText: Plagin yazmağı öyrən
   - icon: 🛠️
     title: Xüsusi ehtiyaclarınıza uyğunlaşır
     details: Rollup bir qəliblə məhdudlaşmayıb. Çoxsaylı konfiqurasiya seçimləri və zəngin plagin interfeysi Rollup-ı xüsusi iş axınları və təkmilləşmiş tulinq ("tooling") üçün ideal bandler edir.
     link: /configuration-options/
-    linkText: Konfiqurasiya seçimlərinə baxın
+    linkText: Konfiqurasiya seçimlərinə bax
   - icon:
       src: /vitejs-logo.svg
     title: Vite-ə güc verən bandler
     details: Veb üçün kod yazırsınız? Vite sizin üçün Rollup-ı məqsədəuyğun seçimlər və lazımi plaginlərlə əvvəlcədən konfiqurasiya edir və sizə inanılmaz dərəcədə sürətli bir tərtibat serveri təqdim edir.
-    link: https://vitejs.dev/
-    linkText: Vite-ə nəzər salın
+    link: https://vite.dev/
+    linkText: Vite-ə nəzər sal
 ---

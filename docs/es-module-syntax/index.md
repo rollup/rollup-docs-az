@@ -1,110 +1,110 @@
 ---
-title: ES Module Syntax
+title: ES Modul Sintaksisi
 ---
 
 # {{ $frontmatter.title }}
 
 [[toc]]
 
-The following is intended as a lightweight reference for the module behaviors defined in the [ES2015 specification](https://www.ecma-international.org/ecma-262/6.0/), since a proper understanding of the import and export statements are essential to the successful use of Rollup.
+Aşağıdakı mətnin [ES2015 spesifikasiyasındakı](https://www.ecma-international.org/ecma-262/6.0/) modullar barədə yığcam məlumat kitabçası olması nəzərdə tutulub, çünki idxalat və ixracat ifadələrinin düzgün qavranılması Rollup-dan düzgün şəkildə istifadə etmək üçün vacibdir.
 
-## Importing
+## İdxaletmə {#importing}
 
-Imported values cannot be reassigned, though imported objects and arrays _can_ be mutated (and the exporting module, and any other importers, will be affected by the mutation). In that way, they behave similarly to `const` declarations.
+İdxal edilmiş dəyərlər yeniləri ilə əvəz edilə bilməzlər, ancaq obyektlər və siyahılar burada istisnadır (həmçinin ixracat modulu və digər idxalatçılar bu əvəzedilmədən təsirlənəcəklər). Belə demək olar ki, idxaletmələr `const` deklarasiyaları ilə bənzərdir.
 
-### Named Imports
+### Adlandırılmış idxallar {#named-imports}
 
-Import a specific item from a source module, with its original name.
+Hansısa moduldan xüsusi bir obyekti orijinal adı ilə:
 
 ```js
 import { something } from './module.js';
 ```
 
-Import a specific item from a source module, with a custom name assigned upon import.
+yaxud həmin obyekti xüsusi bir ad ilə idxal edə bilərsiniz:
 
 ```js
 import { something as somethingElse } from './module.js';
 ```
 
-### Namespace Imports
+### Ad fəzası idxalları {#namespace-imports}
 
-Import everything from the source module as an object which exposes all the source module's named exports as properties and methods.
+Modulun bütün adlandırılmış ixraclarını özündə ehtiva edən obyekt idxal edə bilərsiniz:
 
 ```js
 import * as module from './module.js';
 ```
 
-The `something` example from above would then be attached to the imported object as a property, e.g. `module.something`. If present, the default export can be accessed via `module.default`.
+Yuxarıdakı `something` bu dəfə idxal edilən `module` obyektinin bir parametri — `module.something` kimi idxal ediləcək. Əgər modulun defolt ixracatı varsa,`module.default` vasitəsilə onu əldə etmək mümkündür.
 
-### Default Import
+### Defolt idxal {#default-import}
 
-Import the **default export** of the source module.
+Mənbə modulun **defolt ixracatını** idxal edə bilərsiniz:
 
 ```js
 import something from './module.js';
 ```
 
-### Empty Import
+### Boş idxal {#empty-import}
 
-Load the module code, but don't make any new objects available.
+Yeni obyektlər daxil etmədən modulun kodunu yükləyə bilərsiniz:
 
 ```js
 import './module.js';
 ```
 
-This is useful for polyfills, or when the primary purpose of the imported code is to muck about with prototypes.
+Bu, "polyfill"lərlə iş zamanı, yaxud idxal edilmiş kodla prototiplər vasitəsilə "oyun oynayan" zaman faydalıdır.
 
-### Dynamic Import
+### Dinamik idxal {#dynamic-import}
 
-Import modules using the [dynamic import API](https://github.com/tc39/proposal-dynamic-import#import).
+[Dinamik idxal TPİ-sindən](https://github.com/tc39/proposal-dynamic-import#import) istifadə edərək modulları idxal edə bilərsiniz:
 
 ```js
 import('./modules.js').then(({ default: DefaultExport, NamedExport }) => {
-	// do something with modules.
+	// artıq modullarla iş görə bilərsiniz
 });
 ```
 
-This is useful for code-splitting applications and using modules on-the-fly.
+Bu, tətbiq kodlarını bölən zaman, yaxud modullardan bədahətən istifadə edən zaman işinizə yarayacaq.
 
-## Exporting
+## İxracetmə {#exporting}
 
-### Named exports
+### Adlandırılmış ixraclar {#named-exports}
 
-Export a value that has been previously declared:
+Daha əvvəl deklarasiya edilmiş dəyəri ixrac edə bilərsiniz:
 
 ```js
 const something = true;
 export { something };
 ```
 
-Rename on export:
+İxracat zamanı addəyişmə edə bilərsiniz:
 
 ```js
 export { something as somethingElse };
 ```
 
-Export a value immediately upon declaration:
+Deklarasiya zamanı birbaşa ixracat apara bilərsiniz:
 
 ```js
 // this works with `var`, `let`, `const`, `class`, and `function`
 export const something = true;
 ```
 
-### Default Export
+### Defolt ixracat {#default-export}
 
-Export a single value as the source module's default export:
+Hansısa bir dəyəri modulun defolt ixracatı kimi ixrac edə bilərsiniz:
 
 ```js
 export default something;
 ```
 
-This practice is only recommended if your source module only has one export.
+Bundan modulun yalnız bir ixracatı olan zaman istifadə etmək tövsiyə edilir.
 
-It is bad practice to mix default and named exports in the same module, though it is allowed by the specification.
+Bir modulda defolt və adlı ixracatları birləşdirmək mümkün olsa da, o qədər yaxşı fikir deyil.
 
-## How bindings work
+## Qoşmalar necə işləyir {#how-bindings-work}
 
-ES modules export _live bindings_, not values, so values can be changed after they are initially imported as per [this demo](../repl/index.md?shareable=JTdCJTIyZXhhbXBsZSUyMiUzQW51bGwlMkMlMjJtb2R1bGVzJTIyJTNBJTVCJTdCJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMCU3QiUyMGNvdW50JTJDJTIwaW5jcmVtZW50JTIwJTdEJTIwZnJvbSUyMCcuJTJGaW5jcmVtZW50ZXIuanMnJTNCJTVDbiU1Q25jb25zb2xlLmxvZyhjb3VudCklM0IlMjAlMkYlMkYlMjAwJTVDbmluY3JlbWVudCgpJTNCJTVDbmNvbnNvbGUubG9nKGNvdW50KSUzQiUyMCUyRiUyRiUyMDElMjIlMkMlMjJpc0VudHJ5JTIyJTNBdHJ1ZSUyQyUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTdEJTJDJTdCJTIyY29kZSUyMiUzQSUyMmV4cG9ydCUyMGxldCUyMGNvdW50JTIwJTNEJTIwMCUzQiU1Q24lNUNuZXhwb3J0JTIwZnVuY3Rpb24lMjBpbmNyZW1lbnQoKSUyMCU3QiU1Q24lMjAlMjBjb3VudCUyMCUyQiUzRCUyMDElM0IlNUNuJTdEJTIyJTJDJTIyaXNFbnRyeSUyMiUzQWZhbHNlJTJDJTIybmFtZSUyMiUzQSUyMmluY3JlbWVudGVyLmpzJTIyJTdEJTVEJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMmFtZCUyMiUzQSU3QiUyMmlkJTIyJTNBJTIyJTIyJTdEJTJDJTIyZm9ybWF0JTIyJTNBJTIyZXMlMjIlMkMlMjJnbG9iYWxzJTIyJTNBJTdCJTdEJTJDJTIybmFtZSUyMiUzQSUyMm15QnVuZGxlJTIyJTdEJTdE):
+ES modulları dəyərlər əvəzinə _canlı qoşmalar_ da ixrac edə bilər, beləliklə, onlar idxal ediləndən sonra dəyişdirilə bilər. [Nümunə](../repl/index.md?shareable=JTdCJTIyZXhhbXBsZSUyMiUzQW51bGwlMkMlMjJtb2R1bGVzJTIyJTNBJTVCJTdCJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMCU3QiUyMGNvdW50JTJDJTIwaW5jcmVtZW50JTIwJTdEJTIwZnJvbSUyMCcuJTJGaW5jcmVtZW50ZXIuanMnJTNCJTVDbiU1Q25jb25zb2xlLmxvZyhjb3VudCklM0IlMjAlMkYlMkYlMjAwJTVDbmluY3JlbWVudCgpJTNCJTVDbmNvbnNvbGUubG9nKGNvdW50KSUzQiUyMCUyRiUyRiUyMDElMjIlMkMlMjJpc0VudHJ5JTIyJTNBdHJ1ZSUyQyUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTdEJTJDJTdCJTIyY29kZSUyMiUzQSUyMmV4cG9ydCUyMGxldCUyMGNvdW50JTIwJTNEJTIwMCUzQiU1Q24lNUNuZXhwb3J0JTIwZnVuY3Rpb24lMjBpbmNyZW1lbnQoKSUyMCU3QiU1Q24lMjAlMjBjb3VudCUyMCUyQiUzRCUyMDElM0IlNUNuJTdEJTIyJTJDJTIyaXNFbnRyeSUyMiUzQWZhbHNlJTJDJTIybmFtZSUyMiUzQSUyMmluY3JlbWVudGVyLmpzJTIyJTdEJTVEJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMmFtZCUyMiUzQSU3QiUyMmlkJTIyJTNBJTIyJTIyJTdEJTJDJTIyZm9ybWF0JTIyJTNBJTIyZXMlMjIlMkMlMjJnbG9iYWxzJTIyJTNBJTdCJTdEJTJDJTIybmFtZSUyMiUzQSUyMm15QnVuZGxlJTIyJTdEJTdE):
 
 ```js
 // incrementer.js
@@ -123,5 +123,5 @@ console.log(count); // 0
 increment();
 console.log(count); // 1
 
-count += 1; // Error — only incrementer.js can change this
+count += 1; // Xəta — bunu yalnız incrementer.js dəyişdirə bilər
 ```

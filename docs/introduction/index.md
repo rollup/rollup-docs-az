@@ -8,7 +8,7 @@ title: Giriş
 
 ## Ümumi baxış {#overview}
 
-Rollup kiçik kod parçalarını kitabxana, yaxud tətbiq kimi daha böyük və daha mürəkkəb vahidlərə kompilyasiya edən JavaScript modul bandleridir. O, CommonJS və AMD kimi köhnə üsulların əvəzinə JavaScript-in ES6 nəşrindəki standart modul formatından istifadə edir. ES modulları sizə istədiyiniz kitabxanadan istədiyiniz funksiyaları azad və rahat şəkildə yığmağa şərait yaradır. Gələcəkdə doğma ("native") üsullarla bunu hər yerdə etmək mümkün olacaq, ancaq Rollup sizə bu fürsəti indidən verir.
+Rollup kiçik kod parçalarını kitabxanalar, yaxud tətbiqlər kimi daha böyük və daha mürəkkəb vahidlərə kompilyasiya edən JavaScript modul bandleridir. O, CommonJS və AMD kimi köhnə üsulların əvəzinə JavaScript-in ES6 nəşrindəki standart modul formatından istifadə edir. ES modulları sizə istədiyiniz kitabxanadan istədiyiniz funksiyaları azad və rahat şəkildə yığmağa şərait yaradır. Gələcəkdə doğma ("native") üsullarla bunu hər yerdə etmək mümkün olacaq, ancaq Rollup sizə bu fürsəti indidən verir.
 
 ## Quraşdırma {#installation}
 

@@ -1,5 +1,5 @@
 ---
-title: Command Line Interface
+title: Komanda Sətri İnterfeysi
 ---
 
 # {{ $frontmatter.title }}
