@@ -368,7 +368,7 @@ Məsələn, asılılıqları avtomatik şəkildə "external" kimi işarə etmək
   // import.meta.url-dən istifadə edə bilərsiniz. Ətraflı məlumat üçün:
   // https://nodejs.org/docs/latest-v16.x/api/esm.html#importmetaurl
   const packageJson = JSON.parse(
-  	readFileSync(new URL('./package.json', import.meta.url))
+  	readFileSync(new URL('./package.json', import.meta.url), 'utf-8')
   );
 
   // ...

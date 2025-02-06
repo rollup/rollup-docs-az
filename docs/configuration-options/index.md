@@ -12,7 +12,7 @@ title: Configuration Options
 
 |  |  |
 | --: | :-- |
-| Type: | `(string \| RegExp)[]\| RegExp\| string\| (id: string, parentId: string, isResolved: boolean) => boolean` |
+| Type: | `(string \| RegExp)[] \| RegExp \| string \| (id: string, parentId: string, isResolved: boolean) => boolean` |
 | CLI: | `-e`/`--external <external-id,another-external-id,...>` |
 
 Either a function that takes an `id` and returns `true` (external) or `false` (not external), or an `Array` of module IDs, or regular expressions to match module IDs, that should remain external to the bundle. Can also be just a single ID or regular expression. The matched IDs should be either:
@@ -85,10 +85,10 @@ The conversion back to a relative import is done as if `output.file` or `output.
 
 ### input
 
-|       |                                                         |
-| ----: | :------------------------------------------------------ |
-| Type: | `string \| string []\| { [entryName: string]: string }` |
-|  CLI: | `-i`/`--input <filename>`                               |
+|       |                                                          |
+| ----: | :------------------------------------------------------- |
+| Type: | `string \| string [] \| { [entryName: string]: string }` |
+|  CLI: | `-i`/`--input <filename>`                                |
 
 The bundle's entry point(s) (e.g. your `main.js` or `app.js` or `index.js`). If you provide an array of entry points or an object mapping names to entry points, they will be bundled to separate output chunks. Unless the [`output.file`](#output-file) option is used, generated chunk names will follow the [`output.entryFileNames`](#output-entryfilenames) option. When using the object form, the `[name]` portion of the file name will be the name of the object property while for the array form, it will be the file name of the entry point.
 
@@ -129,7 +129,7 @@ import { fileURLToPath } from 'node:url';
 export default {
 	input: Object.fromEntries(
 		globSync('src/**/*.js').map(file => [
-			// This remove `src/` as well as the file extension from each
+			// This removes `src/` as well as the file extension from each
 			// file, so e.g. src/nested/foo.js becomes nested/foo
 			path.relative(
 				'src',
@@ -167,6 +167,182 @@ File names containing spaces can be specified by using quotes:
 
 ```shell
 rollup "main entry"="src/entry 1.js" "src/other entry.js" --format es
+```
+
+### jsx
+
+|          |                                    |
+| -------: | :--------------------------------- |
+|    Type: | `false \| JsxPreset \| JsxOptions` |
+|     CLI: | `--jsx <preset>`/`--no-jsx`        |
+| Default: | `false`                            |
+
+```typescript
+type JsxPreset = 'react' | 'react-jsx' | 'preserve' | 'preserve-react';
+
+type JsxOptions =
+	| {
+			mode: 'preserve';
+			factory: string | null;
+			fragment: string | null;
+			importSource: string | null;
+			preset: JsxPreset | null;
+	  }
+	| {
+			mode: 'classic';
+			factory: string;
+			fragment: string;
+			importSource: string | null;
+			preset: JsxPreset | null;
+	  }
+	| {
+			mode: 'automatic';
+			factory: string;
+			importSource: string;
+			jsxImportSource: string;
+			preset: JsxPreset | null;
+	  };
+```
+
+Allows Rollup to process JSX syntax to either preserve or transform it depending on the [`jsx.mode`](#jsx-mode). If set to `false`, an error will be thrown if JSX syntax is encountered. You may also choose a preset that will set all options together:
+
+- `"react"`: For transpiling JSX to `React.createElement` calls, where `React` is the default import from `"react"`. This is similar to setting `"jsx": "react"` in TypeScript compiler options.
+  ```js
+  ({
+  	mode: 'classic',
+  	factory: 'React.createElement',
+  	fragment: 'React.Fragment',
+  	importSource: 'react'
+  });
+  ```
+- `"react-jsx"`: This will use the new optimized React transformation introduced with React 17 and is similar to setting `"jsx": "react-jsx"` in TypeScript compiler options.
+  ```js
+  ({
+  	mode: 'automatic',
+  	factory: 'React.createElement',
+  	importSource: 'react',
+  	jsxImportSource: 'react/jsx-runtime'
+  });
+  ```
+- `"preserve"`: This will preserve JSX in the output. This will still tree-shake unused JSX code and may rename JSX identifiers if there are conflicts in the output.
+  ```js
+  ({
+  	mode: 'preserve',
+  	factory: null,
+  	fragment: null,
+  	importSource: null
+  });
+  ```
+- `"preserve-react"`: This will preserve JSX in the output but ensure that the default export of `"react"` is in scope as a variable named `React`.
+  ```js
+  ({
+  	mode: 'preserve',
+  	factory: 'React.createElement',
+  	fragment: 'React.Fragment',
+  	importSource: 'react'
+  });
+  ```
+
+#### jsx.mode
+
+|          |                                          |
+| -------: | :--------------------------------------- |
+|    Type: | `"preserve" \| "classic" \| "automatic"` |
+|     CLI: | `--jsx.mode <mode>`                      |
+| Default: | `"classic"`                              |
+
+This will determine how JSX is processed:
+
+- `"preserve"`: Will keep JSX syntax in the output.
+- `"classic"`: This will perform a JSX transformation as it is needed by older React versions or other frameworks like for instance [Preact](https://preactjs.com). As an example, here is how you would configure jsx for Preact:
+
+  ```js
+  ({
+  	mode: 'classic',
+  	factory: 'h',
+  	fragment: 'Fragment',
+  	importSource: 'preact'
+  });
+  ```
+
+  This would perform the following transformation:
+
+  ```jsx
+  // input
+  console.log(<div>hello</div>);
+
+  // output
+  import { h } from 'preact';
+  console.log(/*#__PURE__*/ h('div', null, 'hello'));
+  ```
+
+- `"automatic"`: This will perform a JSX transformation using the [new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) introduced with React 17. In this mode, Rollup will try to import helpers from [`jsx.jsxImportSource`](#jsx-jsximportsource) to transform JSX. As there are certain edge cases, this mode may still fall back to using the classic transformations when [using the `key` property together with spread attributes](https://github.com/facebook/react/issues/20031#issuecomment-710346866). To this end, you can still specify `jsx.importSource`, `jsx.factory`, and `jsx.fragment` to configure classic mode.
+
+#### jsx.factory
+
+|          |                                   |
+| -------: | :-------------------------------- |
+|    Type: | `string \| null`                  |
+|     CLI: | `--jsx.factory <factory>`         |
+| Default: | `"React.createElement"` or `null` |
+
+The function Rollup uses to create JSX elements in `"classic"` mode or as a fallback in `"automatic"` mode. This is usually `React.createElement` for React or `h` for other frameworks. In `"preserve"` mode, this will ensure that the factory is in scope if [`jsx.importSource`](#jsx-importsource) is specified, or otherwise that a global variable of the same name would not be overridden by local variables. Only in `"preserve"` mode it is possible to set this value to `null`, in which case Rollup will not take care to keep any particular factory function in scope.
+
+If the value contains a `"."` like `React.createElement` and an `jsx.importSource` is specified, Rollup will assume that the left part, e.g. `React`, refers to the default export of the `jsx.importSource`. Otherwise, Rollup assumes it is a named export.
+
+#### jsx.fragment
+
+|          |                              |
+| -------: | :--------------------------- |
+|    Type: | `string \| null`             |
+|     CLI: | `--jsx.fragment <fragment>`  |
+| Default: | `"React.Fragment"` or `null` |
+
+The element function Rollup uses to create JSX fragments. This is usually `React.Fragment` for React or `Fragment` for other frameworks. In `"preserve"` mode, this will ensure that the fragment is in scope if [`jsx.importSource`](#jsx-importsource) is specified, or otherwise that a global variable of the same name would not be overridden by local variables. Only in `"preserve"` mode it is possible to set this value to `null`, in which case Rollup will not take care to keep any particular fragment function in scope.
+
+If the value contains a `"."` like `React.Fragment` and an `jsx.importSource` is specified, Rollup will assume that the left part, e.g. `React`, refers to the default export of the `jsx.importSource`. Otherwise, Rollup assumes it is a named export.
+
+#### jsx.importSource
+
+|          |                                |
+| -------: | :----------------------------- |
+|    Type: | `string \| null`               |
+|     CLI: | `--jsx.importSource <library>` |
+| Default: | `null`                         |
+
+Where to import the element factory function and/or the fragment element from. If left to `null`, Rollup will assume that [`jsx.factory`](#jsx-factory) and [`jsx.fragment`](#jsx-fragment) refer to global variables and makes sure they are not shadowed by local variables.
+
+#### jsx.jsxImportSource
+
+|          |                                   |
+| -------: | :-------------------------------- |
+|    Type: | `string`                          |
+|     CLI: | `--jsx.jsxImportSource <library>` |
+| Default: | `"react/jsx-runtime"`             |
+
+When using `"automatic"` mode, this will specify from where to import the `jsx`, `jsxs` and `Fragment` helpers needed for that transformation. It is not possible to get those from a global variable.
+
+#### jsx.preset
+
+|       |                        |
+| ----: | :--------------------- |
+| Type: | JsxPreset              |
+|  CLI: | `--jsx.preset <value>` |
+
+Allows choosing one of the presets listed above while overriding some options.
+
+```js twoslash
+// ---cut-start---
+/** @type {import('rollup').RollupOptions} */
+// ---cut-end---
+export default {
+	jsx: {
+		preset: 'react',
+		importSource: 'preact',
+		factory: 'h'
+	}
+	// ...
+};
 ```
 
 ### output.dir
@@ -208,7 +384,7 @@ Specifies the format of the generated bundle. One of the following:
 
 |  |  |
 | --: | :-- |
-| Type: | `{ [id: string]: string }\| ((id: string) => string)` |
+| Type: | `{ [id: string]: string } \| ((id: string) => string)` |
 | CLI: | `-g`/`--globals <external-id:variableName,another-external-id:anotherVariableName,...>` |
 
 Specifies `id: variableName` pairs necessary for external imports in `umd`/`iife` bundles. For example, in a case like this…
@@ -439,7 +615,7 @@ When using the CLI, errors will still be printed to the console as they are not 
 
 |  |  |
 | --: | :-- |
-| Type: | `boolean\| "ifRelativeSource"` |
+| Type: | `boolean \| "ifRelativeSource"` |
 | CLI: | `--makeAbsoluteExternalsRelative`/`--no-makeAbsoluteExternalsRelative` |
 | Default: | `"ifRelativeSource"` |
 
@@ -566,15 +742,16 @@ See [`onLog`](#onlog) for more information.
 
 ### output.assetFileNames
 
-|          |                                                      |
-| -------: | :--------------------------------------------------- |
-|    Type: | `string\| ((assetInfo: PreRenderedAsset) => string)` |
-|     CLI: | `--assetFileNames <pattern>`                         |
-| Default: | `"assets/[name]-[hash][extname]"`                    |
+|          |                                                       |
+| -------: | :---------------------------------------------------- |
+|    Type: | `string \| ((assetInfo: PreRenderedAsset) => string)` |
+|     CLI: | `--assetFileNames <pattern>`                          |
+| Default: | `"assets/[name]-[hash][extname]"`                     |
 
 ```typescript
 interface PreRenderedAsset {
-	name?: string;
+	names: string[];
+	originalFileNames: string[];
 	source: string | Uint8Array;
 	type: 'asset';
 }
@@ -591,10 +768,10 @@ Forward slashes `/` can be used to place files in sub-directories. When using a 
 
 ### output.banner/output.footer
 
-|       |                                                                  |
-| ----: | :--------------------------------------------------------------- |
-| Type: | `string \| ((chunk: RenderedChunk) => string\| Promise<string>)` |
-|  CLI: | `--banner`/`--footer <text>`                                     |
+|  |  |
+| --: | :-- |
+| Type: | `string \| ((chunk: RenderedChunk) => string \| Promise<string>)` |
+| CLI: | `--banner`/`--footer <text>` |
 
 See the [`renderChunk`](../plugin-development/index.md#renderchunk) hook for the `RenderedChunk` type.
 
@@ -751,13 +928,13 @@ Whether to extend the global variable defined by the `name` option in `umd` or `
 |     CLI: | `--externalImportAttributes`/`--no-externalImportAttributes` |
 | Default: | `true`                                                       |
 
-Whether to add import attributes to external imports in the output if the output format is `es`. By default, attributes are taken from the input files, but plugins can add or remove attributes later. E.g. `import "foo" assert {type: "json"}` will cause the same import to appear in the output unless the option is set to `false`. Note that all imports of a module need to have consistent attributes, otherwise a warning is emitted.
+Whether to add import attributes to external imports in the output if the output format is `es` or `cjs`. By default, attributes are taken from the input files, but plugins can add or remove attributes later. E.g. `import "foo" assert {type: "json"}` will cause the same import to appear in the output unless the option is set to `false`. Note that all imports of a module need to have consistent attributes, otherwise a warning is emitted.
 
 ### output.generatedCode
 
 |  |  |
 | --: | :-- |
-| Type: | `"es5" \| "es2015"\| { arrowFunctions?: boolean, constBindings?: boolean, objectShorthand?: boolean, preset?: "es5"\| "es2015", reservedNamesAsProps?: boolean, symbols?: boolean }` |
+| Type: | `"es5" \| "es2015" \| { arrowFunctions?: boolean, constBindings?: boolean, objectShorthand?: boolean, preset?: "es5" \| "es2015", reservedNamesAsProps?: boolean, symbols?: boolean }` |
 | CLI: | `--generatedCode <preset>` |
 | Default: | `"es5"` |
 
@@ -979,7 +1156,7 @@ This will inline dynamic imports instead of creating new chunks to create a sing
 
 |  |  |
 | --: | :-- |
-| Type: | `"compat" \| "auto"\| "esModule"\| "default"\| "defaultOnly"\| ((id: string) => "compat"\| "auto"\| "esModule"\| "default"\| "defaultOnly")` |
+| Type: | `"compat" \| "auto" \| "esModule" \| "default" \| "defaultOnly" \| ((id: string) => "compat" \| "auto" \| "esModule" \| "default" \| "defaultOnly")` |
 | CLI: | `--interop <value>` |
 | Default: | `"default"` |
 
@@ -1238,10 +1415,10 @@ There are some additional options that have an effect on the generated interop c
 
 ### output.intro/output.outro
 
-|       |                                                                  |
-| ----: | :--------------------------------------------------------------- |
-| Type: | `string \| ((chunk: RenderedChunk) => string\| Promise<string>)` |
-|  CLI: | `--intro`/`--outro <text>`                                       |
+|  |  |
+| --: | :-- |
+| Type: | `string \| ((chunk: RenderedChunk) => string \| Promise<string>)` |
+| CLI: | `--intro`/`--outro <text>` |
 
 Similar to [`output.banner/output.footer`](#output-banner-output-footer), except that the code goes _inside_ any format-specific wrapper.
 
@@ -1288,6 +1465,8 @@ function manualChunks(id) {
 	if (id.includes('node_modules')) {
 		return 'vendor';
 	}
+
+	return null;
 }
 ```
 
@@ -1471,7 +1650,7 @@ define(['https://d3js.org/d3.v4.min'], function (d3) {
 |     CLI: | `--preserveModules`/`--no-preserveModules` |
 | Default: | `false`                                    |
 
-Instead of creating as few chunks as possible, this mode will create separate chunks for all modules using the original module names as file names. Requires the [`output.dir`](#output-dir) option. Tree-shaking will still be applied, suppressing files that are not used by the provided entry points or do not have side effects when executed and removing unused exports of files that are not entry points. On the other hand, if plugins (like `@rollup/plugin-commonjs`) emit additional "virtual" files to achieve certain results, those files will be emitted as actual files using a pattern `_virtual/fileName.js`.
+Instead of creating as few chunks as possible, this mode will create separate chunks for all modules using the original module names as file names. Requires the [`output.dir`](#output-dir) option. Tree-shaking will still be applied, suppressing files that are not used by the provided entry points or do not have side effects when executed and removing unused exports of files that are not entry points. On the other hand, if plugins (like `@rollup/plugin-commonjs`) emit additional "virtual" files to achieve certain results, those files will be emitted as actual files using a pattern [`${output.virtualDirname}/fileName.js`](#output-virtualdirname).
 
 It is therefore not recommended to blindly use this option to transform an entire file structure to another format if you directly want to import from those files as expected exports may be missing. In that case, you should rather designate all files explicitly as entry points by adding them to the [`input` option object](#input), see the example there for how to do that.
 
@@ -1552,7 +1731,7 @@ This option is particularly useful while using plugins such as `@rollup/plugin-n
 
 |          |                                     |
 | -------: | :---------------------------------- |
-|    Type: | `boolean \| 'inline'\| 'hidden'`    |
+|    Type: | `boolean \| 'inline' \| 'hidden'`   |
 |     CLI: | `-m`/`--sourcemap`/`--no-sourcemap` |
 | Default: | `false`                             |
 
@@ -1566,6 +1745,16 @@ If `true`, a separate sourcemap file will be created. If `"inline"`, the sourcem
 |  CLI: | `--sourcemapBaseUrl <url>` |
 
 By default, sourcemap files generated by Rollup uses relative URLs to reference the files they describe. By providing an absolute base URL, e.g. `https://example.com`, sourcemaps will use absolute URLs instead.
+
+### output.sourcemapDebugIds
+
+|          |                                                |
+| -------: | :--------------------------------------------- |
+|    Type: | `boolean`                                      |
+|     CLI: | `--sourcemapDebugIds`/`--no-sourcemapDebugIds` |
+| Default: | `false`                                        |
+
+if `true`, unique ids will be emitted in source and sourcemaps which streamlines identifying sourcemaps across different builds. See the [TC39 sourcemap debug ID proposal](https://github.com/tc39/source-map/blob/main/proposals/debug-id.md) for more details.
 
 ### output.sourcemapExcludeSources
 
@@ -1681,11 +1870,21 @@ Re-parses each generated chunk to detect if the generated code is valid JavaScri
 
 If the code is invalid, a warning will be issued. Note that no error is thrown so that you can still inspect the generated output. To promote this warning to an error, you can watch for it in an [`onwarn`](#onwarn) handler.
 
+### output.virtualDirname
+
+|          |                              |
+| -------: | :--------------------------- |
+|    Type: | `string`                     |
+|     CLI: | `--virtualDirname <dirname>` |
+| Default: | `_virtual`                   |
+
+This option specifies the directory name for "virtual" files that might be emitted by plugins (like `@rollup/plugin-commonjs`). It is only validated when [`output.preserveModules`](#output-preservemodules) is enabled.
+
 ### preserveEntrySignatures
 
 |  |  |
 | --: | :-- |
-| Type: | `"strict" \| "allow-extension" \| "exports-only"\| false` |
+| Type: | `"strict" \| "allow-extension" \| "exports-only" \| false` |
 | CLI: | `--preserveEntrySignatures <strict \| allow-extension>`/`--no-preserveEntrySignatures` |
 | Default: | `"exports-only"` |
 
@@ -1964,11 +2163,11 @@ See also [`output.interop`](#output-interop).
 
 ### output.exports
 
-|          |                                          |
-| -------: | :--------------------------------------- |
-|    Type: | `"auto" \| "default"\| "named"\| "none"` |
-|     CLI: | `--exports <exportMode>`                 |
-| Default: | `'auto'`                                 |
+|          |                                            |
+| -------: | :----------------------------------------- |
+|    Type: | `"auto" \| "default" \| "named" \| "none"` |
+|     CLI: | `--exports <exportMode>`                   |
+| Default: | `'auto'`                                   |
 
 What export mode to use. Defaults to `auto`, which guesses your intentions based on what the `input` module exports:
 
@@ -2221,7 +2420,7 @@ If this option is provided, bundling will not fail if bindings are imported from
 |          |                                                      |
 | -------: | :--------------------------------------------------- |
 |    Type: | `boolean \| TreeshakingPreset \| TreeshakingOptions` |
-|     CLI: | `--treeshake`/`--no-treeshake`                       |
+|     CLI: | `--treeshake <preset>`/`--no-treeshake`              |
 | Default: | `true`                                               |
 
 ```typescript
@@ -2387,7 +2586,7 @@ styled().div(); // removed
 
 |  |  |
 | --: | :-- |
-| Type: | `boolean\| "no-external"\| string[]\| (id: string, external: boolean) => boolean` |
+| Type: | `boolean \| "no-external" \| string[] \| (id: string, external: boolean) => boolean` |
 | CLI: | `--treeshake.moduleSideEffects`/`--no-treeshake.moduleSideEffects`/`--treeshake.moduleSideEffects no-external` |
 | Default: | `true` |
 
@@ -2475,10 +2674,10 @@ Note that despite the name, this option does not "add" side effects to modules t
 
 #### treeshake.preset
 
-|       |                                          |
-| ----: | :--------------------------------------- |
-| Type: | `"smallest" \| "safest"\| "recommended"` |
-|  CLI: | `--treeshake <value>`<br>                |
+|       |                                           |
+| ----: | :---------------------------------------- |
+| Type: | `"smallest" \| "safest" \| "recommended"` |
+|  CLI: | `--treeshake <value>`<br>                 |
 
 Allows choosing one of the presets listed above while overriding some options.
 
@@ -2499,7 +2698,7 @@ export default {
 
 |  |  |
 | --: | :-- |
-| Type: | `boolean\| 'always'` |
+| Type: | `boolean \| 'always'` |
 | CLI: | `--treeshake.propertyReadSideEffects`/`--no-treeshake.propertyReadSideEffects` |
 | Default: | `true` |
 
@@ -2667,6 +2866,7 @@ interface WatcherOptions {
 	exclude?: string | RegExp | (string | RegExp)[];
 	include?: string | RegExp | (string | RegExp)[];
 	skipWrite?: boolean;
+	onInvalidate?: (id: string) => void;
 }
 ```
 
@@ -2722,10 +2922,10 @@ Whether to clear the screen when a rebuild is triggered.
 
 ### watch.exclude
 
-|       |                                          |
-| ----: | :--------------------------------------- |
-| Type: | `string \| RegExp\| (string\| RegExp)[]` |
-|  CLI: | `--watch.exclude <files>`                |
+|       |                                            |
+| ----: | :----------------------------------------- |
+| Type: | `string \| RegExp \| (string \| RegExp)[]` |
+|  CLI: | `--watch.exclude <files>`                  |
 
 Prevent files from being watched:
 
@@ -2744,10 +2944,10 @@ export default {
 
 ### watch.include
 
-|       |                                          |
-| ----: | :--------------------------------------- |
-| Type: | `string \| RegExp\| (string\| RegExp)[]` |
-|  CLI: | `--watch.include <files>`                |
+|       |                                            |
+| ----: | :----------------------------------------- |
+| Type: | `string \| RegExp \| (string \| RegExp)[]` |
+|  CLI: | `--watch.include <files>`                  |
 
 Limit the file-watching to certain files. Note that this only filters the module graph but does not allow adding additional watch files:
 
@@ -2773,6 +2973,14 @@ export default {
 | Default: | `false`                                    |
 
 Whether to skip the `bundle.write()` step when a rebuild is triggered.
+
+### watch.onInvalidate
+
+|       |                        |
+| ----: | :--------------------- |
+| Type: | `(id: string) => void` |
+
+An optional function that will be called immediately every time a module changes that is part of the build. It receives the id of the changed module as argument. This is different from the [`watchChange`](../plugin-development/index.md#watchchange) plugin hook, which is only called once the running build has finished. This may for instance be used to prevent additional steps from being performed if we know another build will be started anyway once the current build finished. This callback may be called multiple times per build as it tracks every change.
 
 ## Deprecated options
 
