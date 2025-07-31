@@ -100,7 +100,7 @@ Bir sıra seçimlərin defolt dəyərləri artıq dəyişib. Əgər bununla əla
 
 ### CommonJS çıxışında dinamik idxalat {#dynamic-import-in-commonjs-output}
 
-Defolt olaraq `cjs` çıxışı yaradan zaman Rollup artıq hər hansı xarici — bandl olunmamış, `import(…)` kimi dinamik idxalat ifadələrini çıxışa əlavə edəcək. Bu, 14-dən başlayaraq bütün Node versiyalarında əlçatandır və yaradılmış CommonJS çıxışından həm CommonJS, həm də ES modullarını yükləməyə imkan yaradır. Daha köhnə Node versiyalarını dəstəkləmək istəsəniz, [`output.dynamicImportInCjs: false`](../configuration-options/index.md#output-dynamicimportincjs) parametrindən istifadə edə bilərsiniz.
+Defolt kimi `cjs` çıxışı yaradan zaman Rollup artıq hər hansı xarici — bandl olunmamış, `import(…)` kimi dinamik idxalat ifadələrini çıxışa əlavə edəcək. Bu, 14-dən başlayaraq bütün Node versiyalarında əlçatandır və yaradılmış CommonJS çıxışından həm CommonJS, həm də ES modullarını yükləməyə imkan yaradır. Daha köhnə Node versiyalarını dəstəkləmək istəsəniz, [`output.dynamicImportInCjs: false`](../configuration-options/index.md#output-dynamicimportincjs) parametrindən istifadə edə bilərsiniz.
 
 ### Plagin proqramlaşdırma interfeysinə dəyişikliklər {#changes-to-the-plugin-api-1}
 

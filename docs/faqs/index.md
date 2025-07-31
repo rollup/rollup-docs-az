@@ -1,36 +1,36 @@
 ---
-title: Frequently Asked Questions
+title: Tez-tez verilən suallar
 ---
 
 # {{ $frontmatter.title }}
 
 [[toc]]
 
-## Why are ES modules better than CommonJS Modules?
+## ES modulları niyə CommonJS modulları ilə müqayisədə daha üstündür? {#why-are-es-modules-better-than-commonjs-modules}
 
-ES modules are an official standard and the clear path forward for JavaScript code structure, whereas CommonJS modules are an idiosyncratic legacy format that served as a stopgap solution before ES modules had been proposed. ES modules allow static analysis that helps with optimizations like tree-shaking and scope-hoisting, and provide advanced features like circular references and live bindings.
+ES modulları rəsmi standart kimi qəbul edilib və JavaScript kod strukturunu irəli aparan yol kimidir; CommonJS modulları isə köhnədən qalmış bir təhər formatdır və ES modulları təklif edilənə qədər müvəqqəti üsul kimi istifadə olunublar. ES modulları tri-şeykinq və skop-hoystinq ("scope-hoisting") kimi optimizasiyalarda köməkçi olan statik analizə icazə verir və dairəvi istinad və canlı qoşma kimi təkmilləşmiş funksiyaları təmin edir.
 
-## What Is "tree-shaking?"
+## Tri-şeykinq nədir? {#what-is-tree-shaking}
 
-Tree-shaking, also known as "live code inclusion", is Rollup's process of eliminating code that is not actually used in a given project. It is a [form of dead code elimination](https://medium.com/@Rich_Harris/tree-shaking-versus-dead-code-elimination-d3765df85c80#.jnypozs9n) but can be much more efficient than other approaches with regard to output size. The name is derived from the [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) of the modules (not the module graph). The algorithm first marks all relevant statements and then "shakes the syntax tree" to remove all dead code. It is similar in idea to the [mark-and-sweep garbage collection algorithm](https://en.wikipedia.org/wiki/Tracing_garbage_collection). Even though this algorithm is not restricted to ES modules, they make it much more efficient as they allow Rollup to treat all modules together as a big abstract syntax tree with shared bindings.
+Rollup-ın istifadə edilməyən kodları xaricetmə prosesi "canlı koddaxiletmə", yaxud "tri-şeykinq" adlanır (ingilis dilindən hərfi tərcümədə _ağacsilkələmə_ deməkdir). [Ölü kodun aradanqaldırılmasının bir növüdür](https://medium.com/@Rich_Harris/tree-shaking-versus-dead-code-elimination-d3765df85c80#.jnypozs9n), ancaq son nəticənin ölçüsünə görə digər üsullardan daha səmərəlidir. Texnologiyanın adı modulların [abstrakt sintaksis ağacından](https://az.wikipedia.org/wiki/Abstrakt_sintaksis_ağacı) gəlir. Alqoritm əvvəlcə lazım olan ifadələri qeyd edir, daha sonra isə "sintaksis ağacını silkələyərək" bütün ölü kodu aradan götürür. Bu, fikrən [işarələyib-süpürən zibilyığma alqoritminə](https://az.wikipedia.org/wiki/İzsürülən_zibilyığma) bənzəyir. Alqoritm ES modulları ilə məhdudlaşmasa da, onlar Rollup-ın bütün modulları şərikli qoşmaların daxil edildiyi böyük bir abstrakt sintaksis ağacı kimi görməsinə şərait yaratdıqları üçün alqoritmi daha da məhsuldar edirlər.
 
-## How do I use Rollup in Node.js with CommonJS modules?
+## Rollup-dan Node.js-də CommonJS modulları ilə necə istifadə etmək olar? {#how-do-i-use-rollup-in-node-js-with-commonjs-modules}
 
-Rollup strives to implement the specification for ES modules, not necessarily the behaviors of Node.js, NPM, `require()`, and CommonJS. Consequently, loading of CommonJS modules and use of Node's module location resolution logic are both implemented as optional plugins, not included by default in the Rollup core. Just `npm install` the [commonjs](https://github.com/rollup/plugins/tree/master/packages/commonjs) and [node-resolve](https://github.com/rollup/plugins/tree/master/packages/node-resolve) plugins and then enable them using a `rollup.config.js` file and you should be all set. If the modules import JSON files, you will also need the [json](https://github.com/rollup/plugins/tree/master/packages/json) plugin.
+Rollup-ın əsas məqsədi Node.js, NPM, `require()` və CommonJS əvəzinə ES modullarının spesifikasiyasını həyata keçirməkdir. Bu səbəbdəndir ki, həm CommonJS modullarının yüklənməsi, həm də Node-un modul yeri həlletmə məntiqi Rollup-ın özündə defolt kimi yox, plagin kimi mövcuddur. Sadəcə [`commonjs`](https://github.com/rollup/plugins/tree/master/packages/commonjs) və [`node-resolve`](https://github.com/rollup/plugins/tree/master/packages/node-resolve) plaginlərini `npm install` ilə yükləməyiniz kifayətdir. Əgər modullar JSON faylları idxal edirsə, sizə [`json`](https://github.com/rollup/plugins/tree/master/packages/json) plagini də lazım olacaq.
 
-## Why isn't node-resolve a built-in feature?
+## `node-resolve` niyə Rollup-ın özündə yoxdur? {#why-isn-t-node-resolve-a-built-in-feature}
 
-There are two primary reasons:
+Bunun iki əsas səbəbi var:
 
-1. Philosophically, it's because Rollup is essentially a [polyfill](<https://en.wikipedia.org/wiki/Polyfill_(programming)>) of sorts for native module loaders in both Node and browsers. In a browser, `import foo from 'foo'` won't work, because browsers don't use Node's resolution algorithm.
+1. Fəlsəfi nöqteyi-nəzərdən Rollup, əslində, həm Node, həm də brauzerlərdə doğma ("native") modul yükləyiciləri üçün bir növ [polifildir](https://az.wikipedia.org/wiki/Polifil). Brauzerlər Node-un həlletmə alqoritmindən istifadə etmədiyi üçün `import foo from 'foo'` brauzerlərdə işləməyəcək;
 
-2. On a practical level, it's just much easier to develop software if these concerns are neatly separated with a good API. Rollup's core is quite large, and everything that stops it getting larger is a good thing. Meanwhile, it's easier to fix bugs and add features. By keeping Rollup lean, the potential for technical debt is small.
+2. Praktiki səviyyədən baxanda da, əgər bu məsələlər yaxşı bir TPİ ilə təmiz şəkildə ayırılıbsa, proqram yazmaq daha asan olacaq. Rollup-ın nüvəsi kifayət qədər böyükdür və onun daha da çox böyüməyinin qarşısını alan hər bir şey yaxşıdır. Digər bir yandan baqların düzəldilməsi və yeni xüsusiyyətlərin əlavə olunması da asandır. Rollup kiçik saxlananda potensial texniki borc da kiçik qalır.
 
-Please see [this issue](https://github.com/rollup/rollup/issues/1555#issuecomment-322862209) for a more verbose explanation.
+Daha geniş izah üçün [buraya](https://github.com/rollup/rollup/issues/1555#issuecomment-322862209) baxa bilərsiniz.
 
-## Why do additional imports turn up in my entry chunks when code-splitting?
+## Kod bölüşdürməsi zamanı niyə giriş bloklarında artıq idxalatlar görünür? {#why-do-additional-imports-turn-up-in-my-entry-chunks-when-code-splitting}
 
-By default, when creating multiple chunks, imports of dependencies of entry chunks will be added as empty imports to the entry chunks themselves. [Example](../repl/index.md?shareable=JTdCJTIybW9kdWxlcyUyMiUzQSU1QiU3QiUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMHZhbHVlJTIwZnJvbSUyMCcuJTJGb3RoZXItZW50cnkuanMnJTNCJTVDbmNvbnNvbGUubG9nKHZhbHVlKSUzQiUyMiUyQyUyMmlzRW50cnklMjIlM0F0cnVlJTdEJTJDJTdCJTIybmFtZSUyMiUzQSUyMm90aGVyLWVudHJ5LmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMGV4dGVybmFsVmFsdWUlMjBmcm9tJTIwJ2V4dGVybmFsJyUzQiU1Q25leHBvcnQlMjBkZWZhdWx0JTIwMiUyMColMjBleHRlcm5hbFZhbHVlJTNCJTIyJTJDJTIyaXNFbnRyeSUyMiUzQXRydWUlN0QlNUQlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIyZm9ybWF0JTIyJTNBJTIyZXNtJTIyJTJDJTIybmFtZSUyMiUzQSUyMm15QnVuZGxlJTIyJTJDJTIyYW1kJTIyJTNBJTdCJTIyaWQlMjIlM0ElMjIlMjIlN0QlMkMlMjJnbG9iYWxzJTIyJTNBJTdCJTdEJTdEJTJDJTIyZXhhbXBsZSUyMiUzQW51bGwlN0Q=):
+Defolt kimi çoxlu sayda kod blokları yaradılan zaman giriş bloklarının asılılıqlarının elədiyi idxallar giriş blokunun özünə boş idxal kimi əlavə olunacaq. [Məsələn](../repl/index.md?shareable=JTdCJTIybW9kdWxlcyUyMiUzQSU1QiU3QiUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMHZhbHVlJTIwZnJvbSUyMCcuJTJGb3RoZXItZW50cnkuanMnJTNCJTVDbmNvbnNvbGUubG9nKHZhbHVlKSUzQiUyMiUyQyUyMmlzRW50cnklMjIlM0F0cnVlJTdEJTJDJTdCJTIybmFtZSUyMiUzQSUyMm90aGVyLWVudHJ5LmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMGV4dGVybmFsVmFsdWUlMjBmcm9tJTIwJ2V4dGVybmFsJyUzQiU1Q25leHBvcnQlMjBkZWZhdWx0JTIwMiUyMColMjBleHRlcm5hbFZhbHVlJTNCJTIyJTJDJTIyaXNFbnRyeSUyMiUzQXRydWUlN0QlNUQlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIyZm9ybWF0JTIyJTNBJTIyZXNtJTIyJTJDJTIybmFtZSUyMiUzQSUyMm15QnVuZGxlJTIyJTJDJTIyYW1kJTIyJTNBJTdCJTIyaWQlMjIlM0ElMjIlMjIlN0QlMkMlMjJnbG9iYWxzJTIyJTNBJTdCJTdEJTdEJTJDJTIyZXhhbXBsZSUyMiUzQW51bGwlN0Q=):
 
 ```js
 // input
@@ -54,24 +54,24 @@ var value = 2 * externalValue;
 export default value;
 ```
 
-This does not affect code execution order or behaviour, but it will speed up how your code is loaded and parsed. Without this optimization, a JavaScript engine needs to perform the following steps to run `main.js`:
+Bu, kod icrasının sırasını, yaxud davranışını pozmur, ancaq kodun yüklənilməsi və emalını sürətləndirir. Bu optimizasiya olmasa idi, JavaScript mühərriki `main.js` faylını işə salmaq üçün aşağıdakıları yerinə yetirməli olardı:
 
-1. Load and parse `main.js`. At the end, an import to `other-entry.js` will be discovered.
-2. Load and parse `other-entry.js`. At the end, an import to `external` will be discovered.
-3. Load and parse `external`.
-4. Execute `main.js`.
+1. `main.js` faylını yüklə və emal et. Axırda `other-entry.js` faylının idxal edilməsi aşkar ediləcək.
+2. `other-entry.js` faylını yüklə və emal et. Axırda `external` kitabxanasının idxal edilməsi aşkar ediləcək.
+3. `external` kitabxanasını yüklə və emal et.
+4. `main.js` faylını işə sal
 
-With this optimization, a JavaScript engine will discover all transitive dependencies after parsing an entry module, avoiding the waterfall:
+Ancaq optimizasiya olan zaman JavaScript mühərriki bütün keçid asılılıqlarını sadəcə giriş modulunu emal etməklə tapacaq və yuxarıdakı proses daha tez başa çatacaq:
 
-1. Load and parse `main.js`. At the end, imports to `other-entry.js` and `external` will be discovered.
-2. Load and parse `other-entry.js` and `external`. The import of `external` from `other-entry.js` is already loaded and parsed.
-3. Execute `main.js`.
+1. `main.js` faylını yüklə və emal et. Axırda `other-entry.js` faylına və `external` kitabxanasının idxal edilməsi aşkar ediləcək.
+2. `other-entry.js` faylı ilə `external` kitabxanasını yüklə və emal et. `other-entry.js` faylına idxal edilən `external` kitabxanası artıq yüklənilib və emal edilib.
+3. `main.js` faylını işə sal.
 
-There may be situations where this optimization is not desired, in which case you can turn it off via the [`output.hoistTransitiveImports`](../configuration-options/index.md#output-hoisttransitiveimports) option. This optimization is also never applied when using the [`output.preserveModules`](../configuration-options/index.md#output-preservemodules) option.
+Ola bilsin, bu optimizasiya bəzi hallarda arzuolunan olmasın; bu halda onu [`output.hoistTransitiveImports`](../configuration-options/index.md#output-hoisttransitiveimports) seçimi ilə bağlaya bilərsiniz. Həmçinin [`output.preserveModules`](../configuration-options/index.md#output-preservemodules) seçimindən istifadə olunanda da optimizasiya prosesdən xaric edilir.
 
-## How do I add polyfills to a Rollup bundle?
+## Rollup bandlına necə polifil əlavə etmək olar? {#how-do-i-add-polyfills-to-a-rollup-bundle}
 
-Even though Rollup will usually try to maintain exact module execution order when bundling, there are two situations when this is not always the case: code-splitting and external dependencies. The problem is most obvious with external dependencies, see the following [example](../repl/index.md?shareable=JTdCJTIybW9kdWxlcyUyMiUzQSU1QiU3QiUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMCcuJTJGcG9seWZpbGwuanMnJTNCJTVDbmltcG9ydCUyMCdleHRlcm5hbCclM0IlNUNuY29uc29sZS5sb2coJ21haW4nKSUzQiUyMiUyQyUyMmlzRW50cnklMjIlM0F0cnVlJTdEJTJDJTdCJTIybmFtZSUyMiUzQSUyMnBvbHlmaWxsLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmNvbnNvbGUubG9nKCdwb2x5ZmlsbCcpJTNCJTIyJTJDJTIyaXNFbnRyeSUyMiUzQWZhbHNlJTdEJTVEJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMmZvcm1hdCUyMiUzQSUyMmVzbSUyMiUyQyUyMm5hbWUlMjIlM0ElMjJteUJ1bmRsZSUyMiUyQyUyMmFtZCUyMiUzQSU3QiUyMmlkJTIyJTNBJTIyJTIyJTdEJTJDJTIyZ2xvYmFscyUyMiUzQSU3QiU3RCU3RCUyQyUyMmV4YW1wbGUlMjIlM0FudWxsJTdE):
+Baxmayaraq ki, Rollup bandl yaradan zaman, əsasən, modulların icrası sırasını eynilə qoruyub-saxlayacaq, iki halda bu olmaya bilər: kod bölüşdürülməsi və xarici asılılıqlar. Xarici asılılıqlarla bağlı problem açıq-aşkar görünür, aşağıdakı [nümunəyə](../repl/index.md?shareable=JTdCJTIybW9kdWxlcyUyMiUzQSU1QiU3QiUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMCcuJTJGcG9seWZpbGwuanMnJTNCJTVDbmltcG9ydCUyMCdleHRlcm5hbCclM0IlNUNuY29uc29sZS5sb2coJ21haW4nKSUzQiUyMiUyQyUyMmlzRW50cnklMjIlM0F0cnVlJTdEJTJDJTdCJTIybmFtZSUyMiUzQSUyMnBvbHlmaWxsLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmNvbnNvbGUubG9nKCdwb2x5ZmlsbCcpJTNCJTIyJTJDJTIyaXNFbnRyeSUyMiUzQWZhbHNlJTdEJTVEJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMmZvcm1hdCUyMiUzQSUyMmVzbSUyMiUyQyUyMm5hbWUlMjIlM0ElMjJteUJ1bmRsZSUyMiUyQyUyMmFtZCUyMiUzQSU3QiUyMmlkJTIyJTNBJTIyJTIyJTdEJTJDJTIyZ2xvYmFscyUyMiUzQSU3QiU3RCU3RCUyQyUyMmV4YW1wbGUlMjIlM0FudWxsJTdE) nəzər yetirə bilərsiniz:
 
 ```js
 // main.js
@@ -83,7 +83,7 @@ console.log('main');
 console.log('polyfill');
 ```
 
-Here the execution order is `polyfill.js` → `external` → `main.js`. Now when you bundle the code, you will get
+Burada icraedilmə sırası belədir: `polyfill.js` → `external` → `main.js`. Kodu bandl etsəniz, bunu alacaqsınız:
 
 ```js
 import 'external';
@@ -91,117 +91,19 @@ console.log('polyfill');
 console.log('main');
 ```
 
-with the execution order `external` → `polyfill.js` → `main.js`. This is not a problem caused by Rollup putting the `import` at the top of the bundle—imports are always executed first, no matter where they are located in the file. This problem can be solved by creating more chunks: If `polyfill.js` ends up in a different chunk than `main.js`, [correct execution order will be preserved](../repl/index.md?shareable=JTdCJTIybW9kdWxlcyUyMiUzQSU1QiU3QiUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMCcuJTJGcG9seWZpbGwuanMnJTNCJTVDbmltcG9ydCUyMCdleHRlcm5hbCclM0IlNUNuY29uc29sZS5sb2coJ21haW4nKSUzQiUyMiUyQyUyMmlzRW50cnklMjIlM0F0cnVlJTdEJTJDJTdCJTIybmFtZSUyMiUzQSUyMnBvbHlmaWxsLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmNvbnNvbGUubG9nKCdwb2x5ZmlsbCcpJTNCJTIyJTJDJTIyaXNFbnRyeSUyMiUzQXRydWUlN0QlNUQlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIyZm9ybWF0JTIyJTNBJTIyZXNtJTIyJTJDJTIybmFtZSUyMiUzQSUyMm15QnVuZGxlJTIyJTJDJTIyYW1kJTIyJTNBJTdCJTIyaWQlMjIlM0ElMjIlMjIlN0QlMkMlMjJnbG9iYWxzJTIyJTNBJTdCJTdEJTdEJTJDJTIyZXhhbXBsZSUyMiUzQW51bGwlN0Q=). However, there is not yet an automatic way to do this in Rollup. For code-splitting, the situation is similar as Rollup is trying to create as few chunks as possible while making sure no code is executed that is not needed.
+İcraedilmə sırası isə `external` → `polyfill.js` → `main.js` kimi olacaq. Bu, Rollup-ın `import`-u bandlın ən yuxarısına qoymağından yaranan bir problem deyil — idxalatlar faylın harasında yerləşməklərindən asılı olmayaraq həmişə birinci işə düşürlər. Bu problemi əlavə bloklar yaradaraq həll etmək mümkündür — əgər `polyfill.js` `main.js`-dən başqa bloka düşsə, [arzuolunan icraedilmə sırası qorunub-saxlanılacaq](../repl/index.md?shareable=JTdCJTIybW9kdWxlcyUyMiUzQSU1QiU3QiUyMm5hbWUlMjIlM0ElMjJtYWluLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmltcG9ydCUyMCcuJTJGcG9seWZpbGwuanMnJTNCJTVDbmltcG9ydCUyMCdleHRlcm5hbCclM0IlNUNuY29uc29sZS5sb2coJ21haW4nKSUzQiUyMiUyQyUyMmlzRW50cnklMjIlM0F0cnVlJTdEJTJDJTdCJTIybmFtZSUyMiUzQSUyMnBvbHlmaWxsLmpzJTIyJTJDJTIyY29kZSUyMiUzQSUyMmNvbnNvbGUubG9nKCdwb2x5ZmlsbCcpJTNCJTIyJTJDJTIyaXNFbnRyeSUyMiUzQXRydWUlN0QlNUQlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIyZm9ybWF0JTIyJTNBJTIyZXNtJTIyJTJDJTIybmFtZSUyMiUzQSUyMm15QnVuZGxlJTIyJTJDJTIyYW1kJTIyJTNBJTdCJTIyaWQlMjIlM0ElMjIlMjIlN0QlMkMlMjJnbG9iYWxzJTIyJTNBJTdCJTdEJTdEJTJDJTIyZXhhbXBsZSUyMiUzQW51bGwlN0Q=). Lakin bunu Rollup-da avtomatik etmək mümkün deyil. Vəziyyət Rollup lazım olmayan heç bir kodun işə salınmamasını təmin etməyə çalışa-çalışa mümkün olan ən az sayda blok yaratmağa çalışacağı üçün kod bölgüsü üçün də oxşardır.
 
-For most code this is not a problem, because Rollup can guarantee:
+Əksər hallarda bu, problem deyil, çünkü Rollup zəmanət verir ki, əgər "A" modulu "B" modulunu idxal edir və dairəvi idxalat yoxdursa, onda "B" həmişə "A"dan əvvəl işə düşəcək.
 
-> If module A imports module B and there are no circular imports, then B will always be executed before A.
+Polifillər üçün isə bu, problemdir, çünki, əksər hallarda, onlar birinci işə düşməlidir, ancaq hər modulda polifil idxal eləmək elə də yaxşı üsul deyil. Xoşbəxtlikdən, buna, onsuz, ehtiyac da yoxdur, çünki:
 
-This is however a problem for polyfills, as those usually need to be executed first but it is usually not desired to place an import of the polyfill in every single module. Luckily, this is not needed:
+1. əgər polifildən asılı olan hansısa bir xarici asılılıq yoxdursa, polifilin idxalını hər statik giriş nöqtəsində ilk bəyanat kimi qeyd etmək kifayətdir;
+2. əks halda, polifili ayrıca giriş, yaxud [manual bloka](../configuration-options/index.md#output-manualchunks) çevirmək onun birinci icra edilməsini təmin edəcək.
 
-1. If there are no external dependencies that depend on the polyfill, it is enough to add an import of the polyfill as first statement to each static entry point.
-2. Otherwise, additionally making the polyfill a separate entry or [manual chunk](../configuration-options/index.md#output-manualchunks) will always make sure it is executed first.
+## Rollup kitabxanalar, yaxud tətbiqlər düzəltmək üçün nəzərdə tutulub? {#is-rollup-meant-for-building-libraries-or-applications}
 
-## Is Rollup meant for building libraries or applications?
+Rollup, onsuz da, çox sayda böyük JavaScript kitabxanaları tərəfindən istifadə olunur; həmçinin, əksər tətbiqləri yaratmaq üçün də istifadə oluna bilər. Ancaq əgər siz kod bölgüsü, yaxud dinamik idxalatı köhnə brauzerlərdə istifadə etmək istəyirsinizsə, sizə çatışmayan blokları yükləyən əlavə rantaym ("runtime") lazım olacaq. Biz Rollup-ın sistem formatı çıxarışı ilə inteqrasiya edilə bildiyi və canlı ES modulu qoşmaları və yenidənixrac ec-keyslərini ("edge case") yaxşı idarə edə bildiyi üçün ["SystemJS Production Build"dan](https://github.com/systemjs/systemjs#browser-production) istifadə etməyinizi tövsiyə edirik. Alternativ kimi AMD yükləyicisi də sizə kömək edə bilər.
 
-Rollup is already used by many major JavaScript libraries, and can also be used to build the vast majority of applications. However, if you want to use code-splitting or dynamic imports with older browsers, you will need an additional runtime to handle loading missing chunks. We recommend using the [SystemJS Production Build](https://github.com/systemjs/systemjs#browser-production) as it integrates nicely with Rollup's system format output and is capable of properly handling all the ES module live bindings and re-export edge cases. Alternatively, an AMD loader can be used as well.
+## Rollup-ın loqosu çox qəşəngdir, onu kim düzəldib? {#who-made-the-rollup-logo-it-s-lovely}
 
-## How do I run Rollup itself in a browser
-
-While the regular Rollup build relies on some NodeJS features, there is also a browser build available that only uses browser APIs. You can install it via
-
-```shell
-npm install @rollup/browser
-```
-
-and in your script, import it via
-
-```js
-import { rollup } from '@rollup/browser';
-```
-
-Alternatively, you can import from a CDN, e.g. for the ESM build
-
-```js
-import * as rollup from 'https://unpkg.com/@rollup/browser/dist/es/rollup.browser.js';
-```
-
-and for the UMD build
-
-```html
-<script src="https://unpkg.com/@rollup/browser/dist/rollup.browser.js"></script>
-```
-
-which will create a global variable `window.rollup`. As the browser build cannot access the file system, you need to provide plugins that resolve and load all modules you want to bundle. Here is a contrived example that does this:
-
-```js twoslash
-/** @type {import('rollup')} */
-var rollup;
-// ---cut---
-const modules = {
-	'main.js': "import foo from 'foo.js'; console.log(foo);",
-	'foo.js': 'export default 42;'
-};
-
-rollup
-	.rollup({
-		input: 'main.js',
-		plugins: [
-			{
-				name: 'loader',
-				resolveId(source) {
-					if (modules.hasOwnProperty(source)) {
-						return source;
-					}
-				},
-				load(id) {
-					if (modules.hasOwnProperty(id)) {
-						return modules[id];
-					}
-				}
-			}
-		]
-	})
-	.then(bundle => bundle.generate({ format: 'es' }))
-	.then(({ output }) => console.log(output[0].code));
-```
-
-This example only supports two imports, `"main.js"` and `"foo.js"`, and no relative imports. Here is another example that uses absolute URLs as entry points and supports relative imports. In that case, we are just re-bundling Rollup itself, but it could be used on any other URL that exposes an ES module:
-
-```js twoslash
-/** @type {import('rollup')} */
-var rollup;
-// ---cut---
-rollup
-	.rollup({
-		input: 'https://unpkg.com/rollup/dist/es/rollup.js',
-		plugins: [
-			{
-				name: 'url-resolver',
-				resolveId(source, importer) {
-					if (source[0] !== '.') {
-						try {
-							new URL(source);
-							// If it is a valid URL, return it
-							return source;
-						} catch {
-							// Otherwise make it external
-							return { id: source, external: true };
-						}
-					}
-					return new URL(source, importer).href;
-				},
-				async load(id) {
-					const response = await fetch(id);
-					return response.text();
-				}
-			}
-		]
-	})
-	.then(bundle => bundle.generate({ format: 'es' }))
-	.then(({ output }) => console.log(output));
-```
-
-## Who made the Rollup logo? It's lovely.
-
-[Julian Lloyd](https://github.com/jlmakes)!
+[Culian Lloyd](https://github.com/jlmakes)!

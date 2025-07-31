@@ -31,8 +31,7 @@ export default defineConfig({
 	lang: 'az',
 	locales: {
 		en: { label: 'English', link: 'https://rollupjs.org' },
-		root: { label: 'Azərbaycanca' },
-		tr: { label: 'Türkçe', link: 'https://tr.rollupjs.org' },
+		root: { label: 'azərbaycanca' },
 		zh: { label: '简体中文', link: 'https://cn.rollupjs.org' }
 	},
 	markdown: {
@@ -125,11 +124,11 @@ export default defineConfig({
 					},
 					{
 						link: '/command-line-interface/',
-						text: 'Komanda Sətri İnterfeysi'
+						text: 'Komanda sətri interfeysi'
 					},
 					{
 						link: '/javascript-api/',
-						text: 'JavaScript Proqramlaşdırma İnterfeysi'
+						text: 'JavaScript proqramlaşdırma interfeysi'
 					}
 				],
 				text: 'Başlanğıc'
@@ -142,23 +141,23 @@ export default defineConfig({
 					},
 					{
 						link: '/es-module-syntax/',
-						text: 'ES Modul Sintaksisi'
+						text: 'ES modul sintaksisi'
 					},
 					{
 						link: '/faqs/',
-						text: 'Tez-Tez Verilən Suallar'
+						text: 'Tez-tez verilən suallar'
 					},
 					{
 						link: '/troubleshooting/',
-						text: 'Xətaların Aradan Qaldırılması'
+						text: 'Xətaların aradan qaldırılması'
 					},
 					{
 						link: '/migration/',
-						text: 'Rollup 4-ə Keçid'
+						text: 'Rollup 4-ə keçid'
 					},
 					{
 						link: '/tools/',
-						text: 'Digər Alətlər'
+						text: 'Digər alətlər'
 					}
 				],
 				text: 'Ətraflı məlumat'
@@ -167,11 +166,11 @@ export default defineConfig({
 				items: [
 					{
 						link: '/configuration-options/',
-						text: 'Konfiqurasiya Seçimləri'
+						text: 'Konfiqurasiya seçimləri'
 					},
 					{
 						link: '/plugin-development/',
-						text: 'Plagin Tərtibatı'
+						text: 'Plagin tərtibatı'
 					}
 				],
 				text: 'API'

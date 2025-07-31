@@ -1,5 +1,5 @@
 ---
-title: Komanda Sətri İnterfeysi
+title: Komanda sətri interfeysi
 ---
 
 # {{ $frontmatter.title }}
@@ -279,8 +279,8 @@ export default defineConfig({
 `RollupOptions` və bu tipi ehtiva edən `defineConfig` köməkçisindən savayı aşağıdakılar da sizin üçün faydalı ola bilər:
 
 - `OutputOptions` — konfiqurasiya faylının `output` hissəsi;
-- `Plugin` — `name` parametri və bir sıra qarmaqlar ehtiva edən plagin obyekti (bütün qarmaqlar plagin tərtibatını rahatlaşdırmaq üçün verilən tipləri ilə tam təchiz olunmuşdur);
-- `PluginImpl` — parametrlər obyektini plagin obyektinə çevirən funksiya (əksər ictimai Rollup plaginləri bu yolu izləyir).
+- `Plugin` — `name` və bir sıra qarmaqlar ehtiva edən plagin obyekti (bütün qarmaqlar plagin tərtibatını rahatlaşdırmaq üçün verilən tipləri ilə tam təchiz olunmuşdur);
+- `PluginImpl` — parametrlərdən ibarət obyekti plagin obyektinə çevirən funksiya (əksər ictimai Rollup plaginləri bu yolu izləyir).
 
 Siz həmçinin konfiqurasiyanızı [`--configPlugin`](#configplugin-plugin) vasitəsilə birbaşa TypeScript-də də yaza bilərsiniz. TypeScript ilə `RollupOptions` tipini birbaşa idxal edə bilərsiniz:
 
@@ -406,7 +406,7 @@ Məsələn, asılılıqları avtomatik şəkildə "external" kimi işarə etmək
 --amd.define <ad>           `define` əvəzinə istifadə olunacaq funksiya
 --amd.forceJsExtensionForImports AMD idxallarında `.js` uzantısından istifadə
                               edilsin
---amd.id <id>               AMD modulu üçün identifikator (defolt olaraq anonim)
+--amd.id <id>               AMD modulu üçün identifikator (defolt kimi anonim)
 --assetFileNames <sxem>     Daxil edilmiş resurslar üçün ad sxemi
 --banner <mətn>             Bandlın yuxarısına (örtüyün ("wrapper") xaricinə)
                               əlavə ediləcək kod
@@ -682,7 +682,7 @@ Qeyd edilən plagindən istifadə edilsin. Burada plaginləri qeyd etməyin bir 
 rollup -i input.js -f es -p node-resolve -p commonjs,json
 ```
 
-Defolt olaraq plagini yaratmaq üçün olan funksiyalar arqument olmadan işə salınacaq. Ancaq istəsəniz, özünüz arqument daxil edə bilərsiniz:
+Defolt kimi plagini yaratmaq üçün olan funksiyalar arqument olmadan işə salınacaq. Ancaq istəsəniz, özünüz arqument daxil edə bilərsiniz:
 
 ```shell
 rollup -i input.js -f es -p 'terser={output: {beautify: true, indent_level: 2}}'
@@ -694,7 +694,7 @@ Konsola xəbərdarlıqlar çap edilməsin. Əgər konfiqurasiya faylınızda `on
 
 ### `--stdin=uzt` {#stdin-ext}
 
-`stdin`-dən fayl oxunan zaman virtual fayl uzantısı təyin edir. Defolt olaraq Rollup `stdin`-dən oxuduğu fayllar üçün `-` adından uzantı olmadan istifadə edəcək. Ancaq bəzi plaginlər fayllarla iş görərkən uzantılara əsaslanırlar. Həmçinin baxın: [`stdin` vasitəsilə faylın oxunması](#reading-a-file-from-stdin).
+`stdin`-dən fayl oxunan zaman virtual fayl uzantısı təyin edir. Defolt kimi Rollup `stdin`-dən oxuduğu fayllar üçün `-` adından uzantı olmadan istifadə edəcək. Ancaq bəzi plaginlər fayllarla iş görərkən uzantılara əsaslanırlar. Həmçinin baxın: [`stdin` vasitəsilə faylın oxunması](#reading-a-file-from-stdin).
 
 ### `--no-stdin`
 

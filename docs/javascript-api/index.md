@@ -1,5 +1,5 @@
 ---
-title: JavaScript Proqramlaşdırma İnterfeysi
+title: JavaScript proqramlaşdırma interfeysi
 ---
 
 # {{ $frontmatter.title }}
@@ -366,9 +366,9 @@ loadConfigFile(path.resolve(__dirname, 'rollup.config.js'), {
 });
 ```
 
-## Təkmilləşmiş qeydiyyat filtrlərinin tətbiqi {#applying-advanced-log-filters}
+## Təkmilləşmiş qeyd filtrlərinin tətbiqi {#applying-advanced-log-filters}
 
-Komanda sətri interfeysi [`--filterLogs`](../command-line-interface/index.md#filterlogs-filter) sayəsində qeydləri filtrləməyə şərait yaratsa da, bu xüsusiyyət JavaScript proqramlaşdırma interfeysində əlçatan deyil. Buna baxmayaraq, JavaScript proqramlaşdırma interfeysində komanda sətrindəki ilə eyni sintaksisdən istifadə edərək filtrləşdirmə əməliyyatı aparmağınız üçün Rollup `getLogFilter` köməkçisini sizə ixrac edir. Bu, öz fərdi `onLog` emalçınız olan zaman, yaxud üçüncü tərəf sistemlərdə Rollup-ın komanda sətri interfeysi ilə bənzər filtrləmə mexanizmi yaratmaq istəyəndə sizə kifayət qədər kömək edəcək. Funksiya mətn tipli verilənlərdən ibarət siyahı qəbul edir. Qeyd etmək lazımdır ki, bu köməkçi KSİ-dən fərqli olaraq, vergüllə ayrılan filtr siyahılarını bölüşdürmür.
+Komanda sətri interfeysi [`--filterLogs`](../command-line-interface/index.md#filterlogs-filter) ilə qeydləri filtrləməyə şərait yaratsa da, bu xüsusiyyət JavaScript proqramlaşdırma interfeysində əlçatan deyil. Buna baxmayaraq, JavaScript proqramlaşdırma interfeysində komanda sətrindəki ilə eyni sintaksisdən istifadə edərək filtrləşdirmə əməliyyatı aparmağınız üçün Rollup `getLogFilter` köməkçisini sizə ixrac edir. Bu, öz fərdi `onLog` emalçınız olan zaman, yaxud üçüncü tərəf sistemlərdə Rollup-ın komanda sətri interfeysi ilə bənzər filtrləmə mexanizmi yaratmaq istəyəndə sizə kifayət qədər kömək edəcək. Funksiya mətn tipli verilənlərdən ibarət siyahı qəbul edir. Qeyd etmək lazımdır ki, bu köməkçi KSİ-dən fərqli olaraq, vergüllə ayrılan filtr siyahılarını bölüşdürmür.
 
 ```js twoslash
 // rollup.config.mjs

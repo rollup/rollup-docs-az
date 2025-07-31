@@ -83,6 +83,6 @@ Rollup mümkün qədər minimal kod daxil etdiyi üçün daha yüngül, daha sü
 
 Rollup [plagin vasitəsilə](https://github.com/rollup/plugins/tree/master/packages/commonjs) mövcud CommonJS modullarını idxal edə bilər.
 
-### ES modulları yayımlamaq {#publishing-es-modules}
+### ES modullarının yayımlanması {#publishing-es-modules}
 
-ES modullarınızın Node.js, yaxud webpack kimi CommonJS ilə işləyən alətlər tərəfindən istifadə edilə bilməsini təmin etmək üçün Rollup ilə UMD, yaxud CommonJS formatlarına kompilyasiya edib `package.json` faylındakı `main` parametrinə həmin kompilyasiya edilmiş faylı təyin edə bilərsiniz. Əgər `package.json` faylınızda `module` da təyin edilibsə, [webpack 2+](https://webpack.js.org/) və Rollup kimi ES modulunu tanıyan alətlər [birbaşa ES modulunu idxal edəcək](https://github.com/rollup/rollup/wiki/pkg.module).
+ES modullarınızın Node.js, yaxud webpack kimi CommonJS ilə işləyən alətlər tərəfindən istifadə edilə bilməsini təmin etmək üçün Rollup ilə UMD, yaxud CommonJS formatlarına kompilyasiya edib `package.json` faylındakı `main` xassəsinə həmin kompilyasiya edilmiş faylı təyin edə bilərsiniz. Əgər `package.json` faylınızda `module` da təyin edilibsə, [webpack 2+](https://webpack.js.org/) və Rollup kimi ES modulunu tanıyan alətlər [birbaşa ES modulunu idxal edəcək](https://github.com/rollup/rollup/wiki/pkg.module).

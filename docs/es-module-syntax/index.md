@@ -1,5 +1,5 @@
 ---
-title: ES Modul Sintaksisi
+title: ES modul sintaksisi
 ---
 
 # {{ $frontmatter.title }}

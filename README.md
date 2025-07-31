@@ -38,7 +38,7 @@
 
 ## Anbar Haqqında
 
-Bu anbarda ("repository") Rollup-ın dokumentasiyasının azərbaycanca tərcüməsinin mənbə kodu saxlanılır. [Rollup-ın rəsmi anbarından](https://github.com/rollup/rollup) budaqlanıb ("fork") və aktiv olaraq yenilənir.
+Bu anbarda ("repository") Rollup-ın dokumentasiyasının azərbaycanca tərcüməsinin mənbə kodu saxlanılır. [Rollup-ın rəsmi anbarından](https://github.com/rollup/rollup) budaqlanıb ("fork") və aktiv şəkildə yenilənir.
 
 <!--
 ## Rollup Azərbaycanca Dokumentasiyasına Töhfə Verənlər
