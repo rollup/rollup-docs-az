@@ -323,7 +323,7 @@ jobs:
       - name: Build JS
         run: npm run build:cjs
       - name: Download napi artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.settings.target }}
           path: dist/
@@ -415,12 +415,12 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
       - name: Download napi artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.settings.target }}
           path: .
       - name: Download wasm artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: bindings-wasm
       - name: Build and test Rollup
@@ -469,7 +469,7 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: artifacts
       - name: Copy wasm files
