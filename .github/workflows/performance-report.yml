@@ -135,7 +135,7 @@ jobs:
           echo "## Internal benchmark" >> _benchmark/result.md
           cat _benchmark/internal-report.md >> _benchmark/result.md
       - name: Find Performance report
-        uses: peter-evans/find-comment@v3
+        uses: peter-evans/find-comment@v4
         id: findPerformanceReport
         with:
           issue-number: ${{ github.event.number }}
