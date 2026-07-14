@@ -64,7 +64,7 @@ jobs:
       - name: Build artefacts 123
         run: npm exec -- concurrently -c green,blue 'npm:build:napi -- --release' 'npm:build:cjs' && npm run build:copy-native && npm run build:bootstrap:cjs && npm run build:copy-native
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.settings.name }}
           path: dist/
